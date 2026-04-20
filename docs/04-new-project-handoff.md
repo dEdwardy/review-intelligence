@@ -25,6 +25,13 @@ The product helps indie developers read public App Store reviews, identify repea
 
 No Apple developer credentials are required for the current version.
 
+## 3.1 Fetch Strategy
+
+- Prefer the public customer review feed for recent reviews
+- Keep pagination shallow
+- Use the public App Store page HTML as a fallback path only
+- Avoid parallel deep crawling and stop as soon as the result set is stable
+
 ## 4. Keep Out of v1
 
 - Full ASO platform features

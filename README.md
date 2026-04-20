@@ -32,6 +32,14 @@ The app reads public App Store review data directly from Apple:
 
 No Apple developer credentials, demo fixtures, or mock review generators are used in the live analysis path.
 
+## Fetch strategy
+
+- Prefer the public customer review feed for recent reviews
+- Limit pagination to a small number of pages
+- Fall back to the public App Store page HTML only when the feed is unavailable
+- Use short request timeouts and a single retry for transient failures
+- Stop early when the response is empty or duplicate-heavy
+
 ## Project layout
 
 - `app/` routes and layout
