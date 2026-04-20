@@ -64,7 +64,7 @@ export default function HomePage() {
 
           <div className="hero__links">
             <Link href="#analyze" className="button button--primary">
-              Analyze reviews
+              Open analyzer
             </Link>
             <Link href="#workflow" className="button button--ghost">
               See the flow

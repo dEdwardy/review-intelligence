@@ -1,7 +1,6 @@
 'use client';
 
 import { useMemo, useState, useTransition } from 'react';
-import { useRouter } from 'next/navigation';
 
 const REFERENCE_URLS = [
   'https://apps.apple.com/us/app/slack-business-communication/id618783545',
@@ -28,7 +27,6 @@ const PRESETS = [
 ];
 
 export default function ReviewCopilotClient() {
-  const router = useRouter();
   const [appUrl, setAppUrl] = useState('');
   const [competitor1, setCompetitor1] = useState('');
   const [competitor2, setCompetitor2] = useState('');
@@ -38,6 +36,7 @@ export default function ReviewCopilotClient() {
   const [version, setVersion] = useState('all');
   const [isPending, setIsPending] = useState(false);
   const [pendingLabel, setPendingLabel] = useState('');
+  const [errorMessage, setErrorMessage] = useState('');
   const [isNavigating, startTransition] = useTransition();
 
   const competitors = useMemo(
@@ -46,21 +45,26 @@ export default function ReviewCopilotClient() {
   );
 
   function goToAnalysis(params, label) {
+    setErrorMessage('');
     setIsPending(true);
     setPendingLabel(label);
     startTransition(() => {
-      router.push(`/analysis?${params.toString()}`);
+      window.location.assign(`/analysis?${params.toString()}`);
     });
   }
 
   function submit(event) {
-    event.preventDefault();
-    if (!event.currentTarget.reportValidity()) {
+    if (event) {
+      event.preventDefault();
+    }
+    const normalizedAppUrl = appUrl.trim();
+    if (!normalizedAppUrl) {
+      setErrorMessage('Please enter a public App Store URL to continue.');
       return;
     }
 
     const params = new URLSearchParams();
-    params.set('app', appUrl.trim());
+    params.set('app', normalizedAppUrl);
     if (competitors.length) {
       params.set('competitors', competitors.join(','));
     }
@@ -82,7 +86,7 @@ export default function ReviewCopilotClient() {
   }
 
   return (
-    <form className="input-form" onSubmit={submit}>
+    <div className="input-form">
       <div className="input-form__head">
         <div className="eyebrow">Run an analysis</div>
         <h2>Paste one public App Store link and get the review story.</h2>
@@ -118,6 +122,12 @@ export default function ReviewCopilotClient() {
           Use any public App Store product page. No Apple developer account is needed.
         </div>
       </div>
+
+      {errorMessage ? (
+        <div className="form-error" role="alert">
+          {errorMessage}
+        </div>
+      ) : null}
 
       <div className="field-grid">
         <div className="field">
@@ -190,7 +200,8 @@ export default function ReviewCopilotClient() {
       <div className="actions" aria-busy={isPending || isNavigating}>
         <button
           className="button button--primary"
-          type="submit"
+          type="button"
+          onClick={submit}
           disabled={isPending || isNavigating}
         >
           {isPending || isNavigating ? 'Reading App Store reviews...' : 'Analyze reviews'}
@@ -205,6 +216,6 @@ export default function ReviewCopilotClient() {
           {pendingLabel}. This usually takes a few seconds.
         </div>
       ) : null}
-    </form>
+    </div>
   );
 }

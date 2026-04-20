@@ -18,14 +18,15 @@ function parseCompetitors(value) {
 }
 
 export default async function AnalysisPage({ searchParams }) {
-  const appUrl = asString(searchParams?.app).trim();
+  const resolvedSearchParams = await Promise.resolve(searchParams ?? {});
+  const appUrl = asString(resolvedSearchParams.app).trim();
   if (!appUrl) {
     redirect('/');
   }
-  const competitorUrls = parseCompetitors(searchParams?.competitors);
-  const timeRangeDays = Number(asString(searchParams?.days)) || 30;
-  const ratingFilter = asString(searchParams?.ratings) || 'all';
-  const versionFilter = asString(searchParams?.version) || 'all';
+  const competitorUrls = parseCompetitors(resolvedSearchParams.competitors);
+  const timeRangeDays = Number(asString(resolvedSearchParams.days)) || 30;
+  const ratingFilter = asString(resolvedSearchParams.ratings) || 'all';
+  const versionFilter = asString(resolvedSearchParams.version) || 'all';
 
   const analysis = await runAnalysis({
     appUrl,

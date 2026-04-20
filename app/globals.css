@@ -426,6 +426,16 @@ h3 {
   padding-left: 2px;
 }
 
+.form-error {
+  padding: 12px 14px;
+  border: 1px solid rgba(207, 123, 112, 0.35);
+  border-radius: 12px;
+  background: rgba(207, 123, 112, 0.12);
+  color: #f2cbc5;
+  font-size: 0.88rem;
+  line-height: 1.5;
+}
+
 .dashboard {
   padding: 28px 32px;
 }
