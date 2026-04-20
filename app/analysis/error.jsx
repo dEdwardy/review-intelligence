@@ -13,6 +13,10 @@ export default function AnalysisError({ error, reset }) {
             {error?.message ||
               'The App Store page could not be read right now. Check the URL and try again.'}
           </p>
+          <p className="hint">
+            If the page was just updated or the public feed is slow, retrying in a few moments
+            usually helps.
+          </p>
           <div className="actions">
             <button className="button button--primary" type="button" onClick={reset}>
               Try again

@@ -1,6 +1,6 @@
 'use client';
 
-import { useMemo, useState } from 'react';
+import { useMemo, useState, useTransition } from 'react';
 import { useRouter } from 'next/navigation';
 
 const REFERENCE_URLS = [
@@ -37,19 +37,28 @@ export default function ReviewCopilotClient() {
   const [ratings, setRatings] = useState('all');
   const [version, setVersion] = useState('all');
   const [isPending, setIsPending] = useState(false);
+  const [pendingLabel, setPendingLabel] = useState('');
+  const [isNavigating, startTransition] = useTransition();
 
   const competitors = useMemo(
     () => [competitor1, competitor2, competitor3].filter((item) => item.trim()),
     [competitor1, competitor2, competitor3]
   );
 
-  function goToAnalysis(params) {
+  function goToAnalysis(params, label) {
     setIsPending(true);
-    router.push(`/analysis?${params.toString()}`);
+    setPendingLabel(label);
+    startTransition(() => {
+      router.push(`/analysis?${params.toString()}`);
+    });
   }
 
   function submit(event) {
     event.preventDefault();
+    if (!event.currentTarget.reportValidity()) {
+      return;
+    }
+
     const params = new URLSearchParams();
     params.set('app', appUrl.trim());
     if (competitors.length) {
@@ -58,7 +67,7 @@ export default function ReviewCopilotClient() {
     params.set('days', days);
     params.set('ratings', ratings);
     params.set('version', version);
-    goToAnalysis(params);
+    goToAnalysis(params, 'Loading your analysis');
   }
 
   function applyPreset(index) {
@@ -69,17 +78,16 @@ export default function ReviewCopilotClient() {
     params.set('days', preset.days);
     params.set('ratings', preset.ratings);
     params.set('version', preset.version);
-    goToAnalysis(params);
+    goToAnalysis(params, `Loading ${preset.label}`);
   }
 
   return (
     <form className="input-form" onSubmit={submit}>
       <div className="input-form__head">
         <div className="eyebrow">Run an analysis</div>
-        <h2>Input one app, add competitors if they matter.</h2>
+        <h2>Paste one public App Store link and get the review story.</h2>
         <p className="hint">
-          Paste any public App Store product page to inspect recent reviews, recurring complaints,
-          and competitor gaps.
+          Start with one app. Add competitors only if you want a side-by-side read.
         </p>
       </div>
 
@@ -97,7 +105,7 @@ export default function ReviewCopilotClient() {
       </div>
 
       <div className="field">
-        <label htmlFor="app-url">Your app URL</label>
+        <label htmlFor="app-url">App Store URL</label>
         <input
           id="app-url"
           type="url"
@@ -106,11 +114,14 @@ export default function ReviewCopilotClient() {
           placeholder="https://apps.apple.com/us/app/your-app/id123456789"
           required
         />
+        <div className="field__hint">
+          Use any public App Store product page. No Apple developer account is needed.
+        </div>
       </div>
 
       <div className="field-grid">
         <div className="field">
-          <label htmlFor="competitor-1">Competitor 1</label>
+          <label htmlFor="competitor-1">Competitor 1 optional</label>
           <input
             id="competitor-1"
             type="url"
@@ -120,7 +131,7 @@ export default function ReviewCopilotClient() {
           />
         </div>
         <div className="field">
-          <label htmlFor="competitor-2">Competitor 2</label>
+          <label htmlFor="competitor-2">Competitor 2 optional</label>
           <input
             id="competitor-2"
             type="url"
@@ -133,7 +144,7 @@ export default function ReviewCopilotClient() {
 
       <div className="field-grid">
         <div className="field">
-          <label htmlFor="competitor-3">Competitor 3</label>
+          <label htmlFor="competitor-3">Competitor 3 optional</label>
           <input
             id="competitor-3"
             type="url"
@@ -176,14 +187,24 @@ export default function ReviewCopilotClient() {
         </div>
       </div>
 
-      <div className="actions">
-        <button className="button button--primary" type="submit" disabled={isPending}>
-          {isPending ? 'Opening analysis...' : 'Analyze reviews'}
+      <div className="actions" aria-busy={isPending || isNavigating}>
+        <button
+          className="button button--primary"
+          type="submit"
+          disabled={isPending || isNavigating}
+        >
+          {isPending || isNavigating ? 'Reading App Store reviews...' : 'Analyze reviews'}
         </button>
         <a className="button button--ghost" href="#workflow">
           View outputs
         </a>
       </div>
+
+      {(isPending || isNavigating) && pendingLabel ? (
+        <div className="inline-status" role="status" aria-live="polite">
+          {pendingLabel}. This usually takes a few seconds.
+        </div>
+      ) : null}
     </form>
   );
 }

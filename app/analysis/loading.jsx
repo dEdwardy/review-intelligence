@@ -6,7 +6,7 @@ export default function Loading() {
           <div>
             <div className="eyebrow">Loading analysis</div>
             <p className="hint">
-              Reading the App Store page and grouping the latest review themes.
+              Reading the public App Store page, then grouping the latest review themes.
             </p>
           </div>
         </div>
