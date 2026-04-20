@@ -1,6 +1,7 @@
 'use client';
 
-import { useMemo, useState, useTransition } from 'react';
+import { useMemo, useState } from 'react';
+import Link from 'next/link';
 
 const REFERENCE_URLS = [
   'https://apps.apple.com/us/app/slack-business-communication/id618783545',
@@ -37,56 +38,27 @@ export default function ReviewCopilotClient() {
   const [isPending, setIsPending] = useState(false);
   const [pendingLabel, setPendingLabel] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
-  const [isNavigating, startTransition] = useTransition();
 
   const competitors = useMemo(
     () => [competitor1, competitor2, competitor3].filter((item) => item.trim()),
     [competitor1, competitor2, competitor3]
   );
 
-  function goToAnalysis(params, label) {
-    setErrorMessage('');
-    setIsPending(true);
-    setPendingLabel(label);
-    startTransition(() => {
-      window.location.assign(`/analysis?${params.toString()}`);
-    });
-  }
-
   function submit(event) {
-    if (event) {
-      event.preventDefault();
-    }
     const normalizedAppUrl = appUrl.trim();
     if (!normalizedAppUrl) {
+      if (event) {
+        event.preventDefault();
+      }
       setErrorMessage('Please enter a public App Store URL to continue.');
       return;
     }
-
-    const params = new URLSearchParams();
-    params.set('app', normalizedAppUrl);
-    if (competitors.length) {
-      params.set('competitors', competitors.join(','));
-    }
-    params.set('days', days);
-    params.set('ratings', ratings);
-    params.set('version', version);
-    goToAnalysis(params, 'Loading your analysis');
-  }
-
-  function applyPreset(index) {
-    const preset = PRESETS[index];
-    const params = new URLSearchParams();
-    params.set('app', preset.app);
-    params.set('competitors', preset.competitors.join(','));
-    params.set('days', preset.days);
-    params.set('ratings', preset.ratings);
-    params.set('version', preset.version);
-    goToAnalysis(params, `Loading ${preset.label}`);
+    setIsPending(true);
+    setPendingLabel('Loading your analysis');
   }
 
   return (
-    <div className="input-form">
+    <form className="input-form" action="/analysis" method="get" onSubmit={submit} noValidate>
       <div className="input-form__head">
         <div className="eyebrow">Run an analysis</div>
         <h2>Paste one public App Store link and get the review story.</h2>
@@ -97,14 +69,17 @@ export default function ReviewCopilotClient() {
 
       <div className="preset-actions">
         {PRESETS.map((preset, index) => (
-          <button
+          <Link
             key={preset.label}
-            type="button"
             className="preset-button"
-            onClick={() => applyPreset(index)}
+            href={`/analysis?app=${encodeURIComponent(preset.app)}&competitors=${encodeURIComponent(
+              preset.competitors.join(',')
+            )}&days=${encodeURIComponent(preset.days)}&ratings=${encodeURIComponent(
+              preset.ratings
+            )}&version=${encodeURIComponent(preset.version)}`}
           >
             {preset.label}
-          </button>
+          </Link>
         ))}
       </div>
 
@@ -112,6 +87,7 @@ export default function ReviewCopilotClient() {
         <label htmlFor="app-url">App Store URL</label>
         <input
           id="app-url"
+          name="app"
           type="url"
           value={appUrl}
           onChange={(event) => setAppUrl(event.target.value)}
@@ -134,6 +110,7 @@ export default function ReviewCopilotClient() {
           <label htmlFor="competitor-1">Competitor 1 optional</label>
           <input
             id="competitor-1"
+            name="competitor-1"
             type="url"
             value={competitor1}
             onChange={(event) => setCompetitor1(event.target.value)}
@@ -144,6 +121,7 @@ export default function ReviewCopilotClient() {
           <label htmlFor="competitor-2">Competitor 2 optional</label>
           <input
             id="competitor-2"
+            name="competitor-2"
             type="url"
             value={competitor2}
             onChange={(event) => setCompetitor2(event.target.value)}
@@ -152,11 +130,14 @@ export default function ReviewCopilotClient() {
         </div>
       </div>
 
+      <input type="hidden" name="competitors" value={competitors.join(',')} />
+
       <div className="field-grid">
         <div className="field">
           <label htmlFor="competitor-3">Competitor 3 optional</label>
           <input
             id="competitor-3"
+            name="competitor-3"
             type="url"
             value={competitor3}
             onChange={(event) => setCompetitor3(event.target.value)}
@@ -166,7 +147,12 @@ export default function ReviewCopilotClient() {
         <div className="field-grid field-grid--compact">
           <div className="field">
             <label htmlFor="days">Window</label>
-            <select id="days" value={days} onChange={(event) => setDays(event.target.value)}>
+            <select
+              id="days"
+              name="days"
+              value={days}
+              onChange={(event) => setDays(event.target.value)}
+            >
               <option value="30">30 days</option>
               <option value="90">90 days</option>
             </select>
@@ -175,6 +161,7 @@ export default function ReviewCopilotClient() {
             <label htmlFor="ratings">Ratings</label>
             <select
               id="ratings"
+              name="ratings"
               value={ratings}
               onChange={(event) => setRatings(event.target.value)}
             >
@@ -187,6 +174,7 @@ export default function ReviewCopilotClient() {
             <label htmlFor="version">Version</label>
             <select
               id="version"
+              name="version"
               value={version}
               onChange={(event) => setVersion(event.target.value)}
             >
@@ -197,25 +185,20 @@ export default function ReviewCopilotClient() {
         </div>
       </div>
 
-      <div className="actions" aria-busy={isPending || isNavigating}>
-        <button
-          className="button button--primary"
-          type="button"
-          onClick={submit}
-          disabled={isPending || isNavigating}
-        >
-          {isPending || isNavigating ? 'Reading App Store reviews...' : 'Analyze reviews'}
+      <div className="actions" aria-busy={isPending}>
+        <button className="button button--primary" type="submit" disabled={isPending}>
+          {isPending ? 'Reading App Store reviews...' : 'Analyze reviews'}
         </button>
         <a className="button button--ghost" href="#workflow">
           View outputs
         </a>
       </div>
 
-      {(isPending || isNavigating) && pendingLabel ? (
+      {isPending && pendingLabel ? (
         <div className="inline-status" role="status" aria-live="polite">
           {pendingLabel}. This usually takes a few seconds.
         </div>
       ) : null}
-    </div>
+    </form>
   );
 }
