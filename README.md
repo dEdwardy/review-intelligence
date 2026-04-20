@@ -24,8 +24,13 @@ npm run dev
 
 ## Data source
 
-The app reads public App Store review pages and App Store metadata directly from Apple.
-No Apple developer credentials are required for this version.
+The app reads public App Store review data directly from Apple:
+
+- public App Store page HTML with embedded review JSON
+- public iTunes lookup metadata
+- public customer review feed for recent review pagination
+
+No Apple developer credentials, demo fixtures, or mock review generators are used in the live analysis path.
 
 ## Project layout
 
