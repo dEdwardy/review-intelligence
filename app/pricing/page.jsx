@@ -1,8 +1,7 @@
 import Link from 'next/link';
 import { getProjectDisplayName } from '../../lib/app-config.js';
-import PayPalCheckout from '../../components/paypal-checkout.jsx';
 import SessionActions from '../../components/session-actions.jsx';
-import { getPayPalConfig, isPayPalConfigured } from '../../lib/payments/paypal.js';
+import { getPayPalConfig } from '../../lib/payments/paypal.js';
 import { getSupabaseServerClient } from '../../lib/supabase/server.js';
 
 const VALUE_POINTS = [
@@ -22,8 +21,6 @@ const VALUE_POINTS = [
 
 export default async function PricingPage() {
   const projectName = getProjectDisplayName();
-  const config = getPayPalConfig();
-  const configured = isPayPalConfigured();
   const supabase = await getSupabaseServerClient();
   const { data } = await supabase.auth.getUser();
 
@@ -83,16 +80,12 @@ export default async function PricingPage() {
             </Link>
           </div>
           <div className="eyebrow">Checkout</div>
-          <h2>Checkout with PayPal</h2>
-          <p className="hint">
-            {configured
-              ? 'Sandbox or live credentials are ready. Sign in, then continue.'
-              : 'Add PAYPAL_CLIENT_ID and PAYPAL_CLIENT_SECRET to enable checkout.'}
-          </p>
-          <PayPalCheckout config={config} configured={configured} />
-          <div className="pricing-note">
-            Email plus payment is enough to keep the flow lightweight.
-          </div>
+          <h2>Unlock Pro</h2>
+          <p className="hint">Payments coming soon.</p>
+          <button className="button button--primary" type="button" disabled>
+            Unlock Pro
+          </button>
+          <div className="pricing-note">Upgrade to Pro (coming soon).</div>
         </aside>
       </section>
     </main>
