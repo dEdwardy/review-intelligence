@@ -541,7 +541,11 @@ button.text-link {
 
 .paypal-box {
   display: grid;
-  gap: 12px;
+  gap: 14px;
+}
+
+.paypal-box__account {
+  line-height: 1.6;
 }
 
 .paypal-box__account {
@@ -680,7 +684,7 @@ button.text-link {
 
 .field {
   display: grid;
-  gap: 8px;
+  gap: 10px;
 }
 
 .field label {
