@@ -1,0 +1,12 @@
+node_modules
+.next
+coverage
+.DS_Store
+*.log
+
+.vercel
+.husky/_
+.eslintcache
+.playwright-cli
+ui-check*.png
+ui-select-final.png
