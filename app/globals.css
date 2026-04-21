@@ -411,6 +411,13 @@ button.text-link {
   background: #e2c58b;
 }
 
+.button--compact {
+  width: fit-content;
+  min-width: 148px;
+  min-height: 40px;
+  padding: 0 14px;
+}
+
 .button--ghost,
 .tabbar__item,
 .preset-button {

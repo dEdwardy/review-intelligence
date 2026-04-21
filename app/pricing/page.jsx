@@ -83,7 +83,7 @@ export default async function PricingPage() {
           <div className="eyebrow">Checkout</div>
           <h2>Unlock Pro</h2>
           <p className="hint">Payments coming soon.</p>
-          <button className="button button--primary" type="button" disabled>
+          <button className="button button--primary button--compact" type="button" disabled>
             Unlock Pro
           </button>
           <div className="pricing-note">Upgrade to Pro (coming soon).</div>
