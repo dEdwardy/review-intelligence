@@ -1,3 +1,5 @@
+import Link from 'next/link';
+
 const SUPPORT_EMAIL =
   process.env.NEXT_PUBLIC_SUPPORT_EMAIL?.trim() || 'reviewtool.support@gmail.com';
 
@@ -9,6 +11,11 @@ export default function RefundPage() {
   return (
     <main className="shell shell--landing">
       <section className="legal-page">
+        <div className="legal-page__top">
+          <Link href="/" className="text-link">
+            Back to home
+          </Link>
+        </div>
         <div className="eyebrow">Legal</div>
         <h1>Refund Policy</h1>
         <div className="legal-page__content">

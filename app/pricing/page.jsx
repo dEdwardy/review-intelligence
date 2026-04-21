@@ -77,6 +77,11 @@ export default async function PricingPage() {
         </div>
 
         <aside className="pricing-card pricing-card--panel">
+          <div className="pricing-card__top">
+            <Link href="/" className="text-link">
+              Back to home
+            </Link>
+          </div>
           <div className="eyebrow">Checkout</div>
           <h2>Checkout with PayPal</h2>
           <p className="hint">

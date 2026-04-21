@@ -132,6 +132,12 @@ header {
   gap: 18px;
 }
 
+.legal-page__top,
+.pricing-card__top {
+  display: flex;
+  align-items: center;
+}
+
 .legal-page__content {
   display: grid;
   gap: 14px;

@@ -1,3 +1,5 @@
+import Link from 'next/link';
+
 export const metadata = {
   title: 'Privacy Policy | Review Copilot',
 };
@@ -6,6 +8,11 @@ export default function PrivacyPage() {
   return (
     <main className="shell shell--landing">
       <section className="legal-page">
+        <div className="legal-page__top">
+          <Link href="/" className="text-link">
+            Back to home
+          </Link>
+        </div>
         <div className="eyebrow">Legal</div>
         <h1>Privacy Policy</h1>
         <div className="legal-page__content">

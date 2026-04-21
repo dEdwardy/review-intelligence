@@ -18,6 +18,11 @@ export default function BillingSuccessPage({ searchParams }) {
   return (
     <main className="shell shell--landing">
       <section className="pricing-card pricing-card--success">
+        <div className="pricing-card__top">
+          <Link href="/" className="text-link">
+            Back to home
+          </Link>
+        </div>
         <div className="eyebrow">Payment confirmed</div>
         <h1>{projectName} access unlocked.</h1>
         <p className="pricing-card__lede">
