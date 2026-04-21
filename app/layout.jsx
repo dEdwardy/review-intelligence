@@ -1,4 +1,5 @@
 import { IBM_Plex_Sans, Space_Grotesk } from 'next/font/google';
+import SiteFooter from '../components/site-footer.jsx';
 import './globals.css';
 
 const display = Space_Grotesk({
@@ -21,7 +22,10 @@ export const metadata = {
 export default function RootLayout({ children }) {
   return (
     <html lang="en" className={`${display.variable} ${body.variable}`}>
-      <body>{children}</body>
+      <body>
+        {children}
+        <SiteFooter />
+      </body>
     </html>
   );
 }

@@ -43,6 +43,11 @@ body {
     auto;
   color: var(--text);
   font-family: var(--font-body), 'Helvetica Neue', sans-serif;
+  font-size: 15px;
+}
+
+body > * {
+  width: 100%;
 }
 
 a {
@@ -85,6 +90,70 @@ header {
   padding-top: 20px;
 }
 
+.site-footer {
+  padding: 0 0 28px;
+}
+
+.site-footer__inner {
+  width: min(var(--max), calc(100% - 40px));
+  margin: 0 auto;
+  padding-top: 18px;
+  border-top: 1px solid var(--line);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  color: var(--muted);
+  font-size: 0.82rem;
+}
+
+.site-footer__links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 14px;
+}
+
+.site-footer__links a,
+.site-footer__meta a {
+  color: #e6dccd;
+}
+
+.legal-page {
+  max-width: 760px;
+  margin: 0 auto;
+  padding: 32px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-lg);
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.02), rgba(255, 255, 255, 0.01)),
+    var(--bg-elevated);
+  box-shadow: var(--shadow);
+  display: grid;
+  gap: 18px;
+}
+
+.legal-page__content {
+  display: grid;
+  gap: 14px;
+}
+
+.legal-page__content p {
+  margin: 0;
+  color: var(--muted);
+  line-height: 1.7;
+}
+
+.legal-list {
+  margin: -4px 0 0;
+  padding-left: 20px;
+  color: var(--muted);
+  line-height: 1.7;
+}
+
+.legal-list li + li {
+  margin-top: 6px;
+}
+
 .masthead {
   display: flex;
   align-items: center;
@@ -109,7 +178,7 @@ header {
 
 .brand-lockup__name {
   font-family: var(--font-display), sans-serif;
-  font-size: 1rem;
+  font-size: 0.95rem;
   font-weight: 700;
   letter-spacing: -0.02em;
 }
@@ -117,7 +186,7 @@ header {
 .brand-lockup__subhead,
 .masthead__note {
   color: var(--muted);
-  font-size: 0.86rem;
+  font-size: 0.8rem;
 }
 
 .hero,
@@ -179,16 +248,16 @@ h3 {
 }
 
 h1 {
-  max-width: 10ch;
-  font-size: clamp(3rem, 7vw, 5.6rem);
+  max-width: 11.5ch;
+  font-size: clamp(2.6rem, 6vw, 4.8rem);
 }
 
 h2 {
-  font-size: clamp(1.8rem, 3vw, 2.5rem);
+  font-size: clamp(1.55rem, 2.5vw, 2.1rem);
 }
 
 h3 {
-  font-size: 1.2rem;
+  font-size: 1.05rem;
 }
 
 .hero p,
@@ -202,8 +271,8 @@ h3 {
 }
 
 .hero p {
-  max-width: 58ch;
-  font-size: 1rem;
+  max-width: 62ch;
+  font-size: 0.95rem;
 }
 
 .hero__meta,
@@ -225,7 +294,7 @@ h3 {
   border-radius: 999px;
   background: var(--surface);
   color: #ddd4c6;
-  font-size: 0.8rem;
+  font-size: 0.76rem;
 }
 
 .hero__facts {
@@ -265,7 +334,7 @@ h3 {
 
 .text-link {
   color: #e6dccd;
-  font-size: 0.9rem;
+  font-size: 0.84rem;
   border-bottom: 1px solid transparent;
   transition:
     border-color 140ms ease,
@@ -297,12 +366,12 @@ button.text-link {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  min-height: 46px;
-  padding: 0 18px;
+  min-height: 42px;
+  padding: 0 16px;
   border-radius: 999px;
   border: 1px solid var(--line);
   cursor: pointer;
-  font-size: 0.94rem;
+  font-size: 0.86rem;
   font-weight: 600;
   white-space: nowrap;
   transition:
@@ -346,7 +415,7 @@ button.text-link {
 
 .workflow {
   margin-top: 22px;
-  padding: 28px 32px;
+  padding: 24px 28px;
 }
 
 .pricing-layout {
@@ -356,7 +425,7 @@ button.text-link {
 }
 
 .pricing-hero {
-  padding: 28px;
+  padding: 24px;
   border: 1px solid var(--line);
   border-radius: var(--radius-lg);
   background:
@@ -384,7 +453,7 @@ button.text-link {
 }
 
 .pricing-point h2 {
-  font-size: 1.05rem;
+  font-size: 0.98rem;
 }
 
 .pricing-point p {
@@ -393,7 +462,7 @@ button.text-link {
 }
 
 .pricing-card {
-  padding: 28px;
+  padding: 24px;
   border: 1px solid var(--line);
   border-radius: var(--radius-lg);
   background:
@@ -453,8 +522,8 @@ button.text-link {
 }
 
 .auth-card__title {
-  max-width: 12ch;
-  font-size: clamp(2.2rem, 4.7vw, 3.7rem);
+  max-width: 14ch;
+  font-size: clamp(1.9rem, 4vw, 3rem);
 }
 
 .auth-card__lede {
@@ -505,7 +574,7 @@ button.text-link {
   border-radius: 999px;
   background: rgba(255, 255, 255, 0.02);
   color: #ddd4c6;
-  font-size: 0.82rem;
+  font-size: 0.76rem;
 }
 .pricing-card__lede {
   max-width: 46ch;
@@ -521,7 +590,7 @@ button.text-link {
 
 .pricing-card__amount {
   font-family: var(--font-display), sans-serif;
-  font-size: clamp(2rem, 4vw, 3.2rem);
+  font-size: clamp(1.7rem, 3.2vw, 2.5rem);
   line-height: 1;
   letter-spacing: -0.04em;
 }
@@ -562,7 +631,7 @@ button.text-link {
 
 .auth-actions__submit {
   width: 100%;
-  min-height: 52px;
+  min-height: 48px;
 }
 
 .auth-actions__secondary {
@@ -573,7 +642,7 @@ button.text-link {
 
 .auth-actions__secondary .button {
   width: 100%;
-  min-height: 48px;
+  min-height: 44px;
 }
 
 .auth-footer-link {
@@ -589,11 +658,11 @@ button.text-link {
 }
 
 .auth-card__panel .field label {
-  font-size: 0.82rem;
+  font-size: 0.78rem;
 }
 
 .auth-card__panel .field input {
-  min-height: 54px;
+  min-height: 50px;
 }
 
 .auth-card__panel .inline-status {
@@ -611,6 +680,7 @@ button.text-link {
   padding: 14px 16px;
   color: var(--muted);
   line-height: 1.65;
+  font-size: 0.88rem;
 }
 
 .pricing-summary {
@@ -643,15 +713,15 @@ button.text-link {
 .workflow__row {
   display: grid;
   grid-template-columns: 72px minmax(0, 1fr);
-  gap: 18px;
-  padding: 18px 0;
+  gap: 16px;
+  padding: 16px 0;
   border-bottom: 1px solid var(--line);
 }
 
 .workflow__index {
   color: var(--muted);
   font-family: var(--font-display), sans-serif;
-  font-size: 0.95rem;
+  font-size: 0.84rem;
 }
 
 .workflow__content {
@@ -670,7 +740,7 @@ button.text-link {
 }
 
 .input-form h2 {
-  font-size: 1.5rem;
+  font-size: 1.28rem;
 }
 
 .preset-actions {
@@ -713,15 +783,15 @@ button.text-link {
 
 .field label {
   color: #d8d0c3;
-  font-size: 0.84rem;
+  font-size: 0.78rem;
   font-weight: 600;
 }
 
 .field input,
 .field select {
   width: 100%;
-  min-height: 56px;
-  padding: 0 18px;
+  min-height: 50px;
+  padding: 0 16px;
   border-radius: 12px;
   border: 1px solid rgba(255, 255, 255, 0.1);
   background:
@@ -729,7 +799,7 @@ button.text-link {
     rgba(0, 0, 0, 0.16);
   color: var(--text);
   outline: none;
-  font-size: 0.96rem;
+  font-size: 0.88rem;
 }
 
 .field select {
@@ -809,7 +879,7 @@ button.text-link {
 .field__hint,
 .inline-status {
   color: var(--muted);
-  font-size: 0.84rem;
+  font-size: 0.78rem;
   line-height: 1.5;
 }
 
@@ -842,7 +912,7 @@ button.text-link {
 
 .dashboard__top h1 {
   max-width: 14ch;
-  font-size: clamp(2.2rem, 5vw, 3.8rem);
+  font-size: clamp(1.9rem, 4vw, 3rem);
 }
 
 .dashboard__summary {
@@ -871,7 +941,7 @@ button.text-link {
 
 .metric__label {
   color: var(--muted);
-  font-size: 0.8rem;
+  font-size: 0.72rem;
   text-transform: uppercase;
   letter-spacing: 0.1em;
 }
@@ -880,7 +950,7 @@ button.text-link {
   display: block;
   margin: 12px 0 8px;
   font-family: var(--font-display), sans-serif;
-  font-size: 1.85rem;
+  font-size: 1.55rem;
   line-height: 1.05;
 }
 
@@ -891,7 +961,7 @@ button.text-link {
 
 .metric__note {
   color: var(--muted);
-  font-size: 0.87rem;
+  font-size: 0.8rem;
   line-height: 1.6;
 }
 
@@ -998,7 +1068,7 @@ button.text-link {
 .gap-item__title,
 .draft__title {
   font-weight: 700;
-  font-size: 1rem;
+  font-size: 0.92rem;
 }
 
 .cluster__meta,
@@ -1006,7 +1076,7 @@ button.text-link {
 .review__meta {
   margin-top: 6px;
   color: var(--muted);
-  font-size: 0.84rem;
+  font-size: 0.78rem;
   line-height: 1.5;
 }
 
@@ -1047,7 +1117,7 @@ button.text-link {
 
 .empty-state h2 {
   margin-bottom: 10px;
-  font-size: 1.35rem;
+  font-size: 1.1rem;
 }
 
 .preview-output {
@@ -1092,8 +1162,8 @@ button.text-link {
 
 .skeleton-line--large {
   width: min(520px, 100%);
-  height: 30px;
-  margin-bottom: 22px;
+  height: 26px;
+  margin-bottom: 18px;
 }
 
 .skeleton-card {
@@ -1148,6 +1218,16 @@ button.text-link {
   .shell {
     width: min(var(--max), calc(100% - 24px));
     padding: 18px 0 36px;
+  }
+
+  .site-footer__inner {
+    width: min(var(--max), calc(100% - 24px));
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .legal-page {
+    padding: 20px;
   }
 
   .masthead,
@@ -1209,7 +1289,7 @@ button.text-link {
 
   .auth-card__title {
     max-width: none;
-    font-size: clamp(1.7rem, 7vw, 2.2rem);
+    font-size: clamp(1.6rem, 6vw, 2rem);
   }
 
   .auth-mode-switch {
@@ -1231,7 +1311,7 @@ button.text-link {
   }
 
   .auth-card__panel .field input {
-    min-height: 50px;
+    min-height: 46px;
   }
 
   .auth-actions {
