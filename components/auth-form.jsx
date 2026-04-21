@@ -31,7 +31,6 @@ export default function AuthForm() {
         : supabase.auth.signUp({ email, password, options: { emailRedirectTo: redirectTo } });
 
     const { data, error } = await authRequest;
-
     setBusy(false);
     setIsError(Boolean(error));
     setMessage(

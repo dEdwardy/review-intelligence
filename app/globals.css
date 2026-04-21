@@ -81,7 +81,6 @@ header {
   width: min(920px, calc(100% - 32px));
   padding-top: 48px;
 }
-
 .shell--analysis {
   padding-top: 20px;
 }
@@ -495,7 +494,6 @@ button.text-link {
   color: #ddd4c6;
   font-size: 0.82rem;
 }
-
 .pricing-card__lede {
   max-width: 46ch;
   color: var(--muted);
@@ -1168,7 +1166,6 @@ button.text-link {
   .auth-mode-switch__item {
     flex: 1 1 0;
   }
-
   .tabbar {
     width: 100%;
     overflow-x: auto;
