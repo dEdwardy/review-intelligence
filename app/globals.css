@@ -418,8 +418,8 @@ button.text-link {
 .auth-card {
   display: grid;
   grid-template-columns: minmax(0, 0.95fr) minmax(320px, 0.9fr);
-  gap: 28px;
-  padding: 30px;
+  gap: 24px;
+  padding: 26px;
   border: 1px solid var(--line);
   border-radius: 28px;
   background:
@@ -429,19 +429,30 @@ button.text-link {
 }
 
 .auth-card__intro,
+.auth-card__panel,
 .auth-form {
   display: grid;
   align-content: start;
 }
 
 .auth-card__intro {
-  gap: 16px;
-  padding-right: 8px;
+  gap: 14px;
+  padding: 8px 10px 8px 4px;
+}
+
+.auth-card__panel {
+  gap: 14px;
+  padding: 20px;
+  border: 1px solid var(--line);
+  border-radius: 22px;
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.03), rgba(255, 255, 255, 0.01)),
+    rgba(255, 255, 255, 0.015);
 }
 
 .auth-card__title {
   max-width: 12ch;
-  font-size: clamp(2.4rem, 5vw, 4rem);
+  font-size: clamp(2.2rem, 4.7vw, 3.7rem);
 }
 
 .auth-card__lede {
@@ -537,10 +548,14 @@ button.text-link {
   line-height: 1.6;
 }
 
+.paypal-box__account {
+  line-height: 1.6;
+}
+
 .auth-actions {
   display: grid;
-  gap: 14px;
-  margin-top: 6px;
+  gap: 12px;
+  margin-top: 2px;
 }
 
 .auth-actions__submit {
@@ -558,7 +573,7 @@ button.text-link {
 }
 
 .auth-footer-link {
-  margin-top: 4px;
+  margin-top: 0;
 }
 
 .pricing-note,
@@ -622,7 +637,7 @@ button.text-link {
 
 .input-form {
   display: grid;
-  gap: 16px;
+  gap: 14px;
 }
 
 .input-form__head {
@@ -637,7 +652,7 @@ button.text-link {
 .preset-actions {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 10px;
+  gap: 12px;
   align-items: stretch;
 }
 
@@ -746,12 +761,12 @@ button.text-link {
 .field-grid {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 12px;
+  gap: 14px;
 }
 
 .field-grid--compact {
   grid-template-columns: repeat(3, minmax(140px, 1fr));
-  gap: 10px;
+  gap: 12px;
   width: 100%;
 }
 
@@ -1127,6 +1142,10 @@ button.text-link {
   .dashboard,
   .panel,
   .auth-card {
+    padding: 18px;
+  }
+
+  .auth-card__panel {
     padding: 18px;
   }
 
