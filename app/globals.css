@@ -138,6 +138,12 @@ header {
   align-items: center;
 }
 
+.auth-card__home,
+.dashboard__home {
+  display: flex;
+  justify-content: flex-start;
+}
+
 .legal-page__content {
   display: grid;
   gap: 14px;
@@ -919,6 +925,10 @@ button.text-link {
 .dashboard__top h1 {
   max-width: 14ch;
   font-size: clamp(1.9rem, 4vw, 3rem);
+}
+
+.dashboard__home {
+  margin-left: auto;
 }
 
 .dashboard__summary {

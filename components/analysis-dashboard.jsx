@@ -1,6 +1,7 @@
 'use client';
 
 import { useMemo, useState } from 'react';
+import Link from 'next/link';
 import { buildMarkdownReport } from '../lib/export/markdown.js';
 import { buildCsvReport } from '../lib/export/csv.js';
 import { getStoragePrefix } from '../lib/app-config.js';
@@ -64,6 +65,11 @@ export default function AnalysisDashboard({ analysis, viewer }) {
             <div className="eyebrow">Analysis</div>
             <h1>{analysis.primaryApp.name}</h1>
             <p className="dashboard__summary">{analysis.overview.headline}</p>
+          </div>
+          <div className="dashboard__home">
+            <Link className="text-link" href="/">
+              Back to home
+            </Link>
           </div>
           <div className="dashboard__filters">
             <span>{analysis.mode}</span>

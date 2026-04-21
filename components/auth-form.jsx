@@ -62,6 +62,11 @@ export default function AuthForm() {
     <main className="shell shell--landing auth-shell">
       <section className="auth-card">
         <div className="auth-card__intro">
+          <div className="auth-card__home">
+            <Link href="/" className="text-link">
+              Back to home
+            </Link>
+          </div>
           <div className="eyebrow">Account Access</div>
           <h1 className="auth-card__title">
             {mode === 'signin'
