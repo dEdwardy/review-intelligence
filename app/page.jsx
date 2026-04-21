@@ -2,7 +2,7 @@ import Link from 'next/link';
 import ReviewCopilotClient from '../components/review-copilot-client.jsx';
 import SessionActions from '../components/session-actions.jsx';
 import { getProjectDisplayName } from '../lib/app-config.js';
-import { getSupabaseServerClient } from '../lib/supabase/server.js';
+import { getViewer } from '../lib/user/viewer.js';
 
 const REFERENCE_LINKS = [
   {
@@ -16,10 +16,9 @@ const REFERENCE_LINKS = [
 ];
 
 export default async function HomePage() {
-  const supabase = await getSupabaseServerClient();
-  const { data } = await supabase.auth.getUser();
+  const viewer = await getViewer();
   const projectName = getProjectDisplayName();
-  const isSignedIn = Boolean(data?.user);
+  const isSignedIn = Boolean(viewer.user);
 
   return (
     <main className="shell shell--landing">
@@ -39,7 +38,7 @@ export default async function HomePage() {
             Pricing
           </Link>
         </div>
-        <SessionActions userEmail={data?.user?.email ?? ''} nextPath="/" />
+        <SessionActions userEmail={viewer.email} nextPath="/" />
       </header>
 
       <section className="hero">
@@ -55,6 +54,17 @@ export default async function HomePage() {
             <span>One app, up to three competitors</span>
             <span>30 or 90 day windows</span>
             <span>Markdown and CSV exports</span>
+          </div>
+          <div className="hero__quota">
+            {viewer.user ? (
+              <span>
+                {viewer.planStatus === 'premium'
+                  ? 'Pro access active'
+                  : `${viewer.freeRemaining} free run${viewer.freeRemaining === 1 ? '' : 's'} left`}
+              </span>
+            ) : (
+              <span>Sign up to get 3 free runs</span>
+            )}
           </div>
 
           <div className="hero__proof">

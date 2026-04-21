@@ -2,7 +2,7 @@ import Link from 'next/link';
 import { getProjectDisplayName } from '../../lib/app-config.js';
 import SessionActions from '../../components/session-actions.jsx';
 import { getPayPalConfig } from '../../lib/payments/paypal.js';
-import { getSupabaseServerClient } from '../../lib/supabase/server.js';
+import { getViewer } from '../../lib/user/viewer.js';
 
 const VALUE_POINTS = [
   {
@@ -22,8 +22,7 @@ const VALUE_POINTS = [
 export default async function PricingPage() {
   const projectName = getProjectDisplayName();
   const config = getPayPalConfig();
-  const supabase = await getSupabaseServerClient();
-  const { data } = await supabase.auth.getUser();
+  const viewer = await getViewer();
 
   return (
     <main className="shell shell--landing">
@@ -45,7 +44,7 @@ export default async function PricingPage() {
             Analyzer
           </Link>
         </div>
-        <SessionActions userEmail={data?.user?.email ?? ''} nextPath="/pricing" />
+        <SessionActions userEmail={viewer.email} nextPath="/pricing" />
       </header>
 
       <section className="pricing-layout">
@@ -62,6 +61,20 @@ export default async function PricingPage() {
               {config.currency} {config.amount}
             </span>
             <span className="pricing-card__term">launch price, one-time purchase</span>
+          </div>
+
+          <div className="pricing-card__quota">
+            {viewer.user ? (
+              viewer.planStatus === 'premium' ? (
+                <span>Pro access active</span>
+              ) : (
+                <span>
+                  {viewer.freeRemaining} free run{viewer.freeRemaining === 1 ? '' : 's'} left
+                </span>
+              )
+            ) : (
+              <span>Sign up to get 3 free runs before upgrade</span>
+            )}
           </div>
 
           <div className="pricing-hero__grid">
