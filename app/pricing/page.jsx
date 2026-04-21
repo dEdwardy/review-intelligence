@@ -21,6 +21,7 @@ const VALUE_POINTS = [
 
 export default async function PricingPage() {
   const projectName = getProjectDisplayName();
+  const config = getPayPalConfig();
   const supabase = await getSupabaseServerClient();
   const { data } = await supabase.auth.getUser();
 
