@@ -53,7 +53,7 @@ export default function AuthForm() {
     }
 
     if (!error && (mode === 'signin' || (mode === 'signup' && data?.session))) {
-      setMessage('Redirecting…');
+      setMessage('Redirecting...');
       window.location.href = nextPath;
     }
   }
@@ -95,77 +95,79 @@ export default function AuthForm() {
           </div>
         </div>
 
-        <form onSubmit={handleSubmit} className="auth-form">
-          <div className="field">
-            <label htmlFor="email">Email</label>
-            <input
-              id="email"
-              name="email"
-              type="email"
-              inputMode="email"
-              autoComplete="email"
-              spellCheck={false}
-              value={email}
-              onChange={(event) => setEmail(event.target.value)}
-              disabled={busy}
-              placeholder="you@company.com..."
-              required
-            />
-          </div>
-
-          <div className="field">
-            <label htmlFor="password">Password</label>
-            <input
-              id="password"
-              name="password"
-              type="password"
-              autoComplete={mode === 'signin' ? 'current-password' : 'new-password'}
-              minLength={6}
-              value={password}
-              onChange={(event) => setPassword(event.target.value)}
-              disabled={busy}
-              placeholder={
-                mode === 'signin' ? 'Enter your password...' : 'Use at least 6 characters...'
-              }
-              required
-            />
-          </div>
-
-          <div className="auth-actions">
-            <button
-              className="button button--primary auth-actions__submit"
-              type="submit"
-              disabled={busy}
-              aria-busy={busy}
-            >
-              {busy ? 'Working…' : mode === 'signin' ? 'Sign In' : 'Create Account'}
-            </button>
-            <div className="auth-actions__secondary">
-              <button
-                className="button button--ghost"
-                type="button"
+        <div className="auth-card__panel">
+          <form onSubmit={handleSubmit} className="auth-form">
+            <div className="field">
+              <label htmlFor="email">Email</label>
+              <input
+                id="email"
+                name="email"
+                type="email"
+                inputMode="email"
+                autoComplete="email"
+                spellCheck={false}
+                value={email}
+                onChange={(event) => setEmail(event.target.value)}
                 disabled={busy}
-                onClick={() => setMode(mode === 'signin' ? 'signup' : 'signin')}
-              >
-                Switch to {mode === 'signin' ? 'Sign Up' : 'Sign In'}
-              </button>
-              <Link href="/pricing" className="button button--ghost">
-                View Pricing
-              </Link>
+                placeholder="you@company.com..."
+                required
+              />
             </div>
-          </div>
-        </form>
 
-        {message ? (
-          <div className="inline-status" role={isError ? 'alert' : 'status'} aria-live="polite">
-            {message}
-          </div>
-        ) : null}
+            <div className="field">
+              <label htmlFor="password">Password</label>
+              <input
+                id="password"
+                name="password"
+                type="password"
+                autoComplete={mode === 'signin' ? 'current-password' : 'new-password'}
+                minLength={6}
+                value={password}
+                onChange={(event) => setPassword(event.target.value)}
+                disabled={busy}
+                placeholder={
+                  mode === 'signin' ? 'Enter your password...' : 'Use at least 6 characters...'
+                }
+                required
+              />
+            </div>
 
-        <div className="auth-footer-link">
-          <Link href={nextPath} className="text-link">
-            Back to previous page
-          </Link>
+            <div className="auth-actions">
+              <button
+                className="button button--primary auth-actions__submit"
+                type="submit"
+                disabled={busy}
+                aria-busy={busy}
+              >
+                {busy ? 'Working...' : mode === 'signin' ? 'Sign In' : 'Create Account'}
+              </button>
+              <div className="auth-actions__secondary">
+                <button
+                  className="button button--ghost"
+                  type="button"
+                  disabled={busy}
+                  onClick={() => setMode(mode === 'signin' ? 'signup' : 'signin')}
+                >
+                  Switch to {mode === 'signin' ? 'Sign Up' : 'Sign In'}
+                </button>
+                <Link href="/pricing" className="button button--ghost">
+                  View Pricing
+                </Link>
+              </div>
+            </div>
+          </form>
+
+          {message ? (
+            <div className="inline-status" role={isError ? 'alert' : 'status'} aria-live="polite">
+              {message}
+            </div>
+          ) : null}
+
+          <div className="auth-footer-link">
+            <Link href={nextPath} className="text-link">
+              Back to previous page
+            </Link>
+          </div>
         </div>
       </section>
     </main>

@@ -97,7 +97,7 @@ export default function ReviewCopilotClient() {
             aria-busy={presetBusy === preset.label}
             onClick={() => loadPreset(preset)}
           >
-            {presetBusy === preset.label ? 'Loading…' : preset.label}
+            {presetBusy === preset.label ? 'Loading...' : preset.label}
           </button>
         ))}
       </div>
@@ -217,7 +217,7 @@ export default function ReviewCopilotClient() {
 
       <div className="actions" aria-busy={isPending}>
         <button className="button button--primary" type="submit" disabled={isPending}>
-          {isPending ? 'Reading App Store reviews…' : 'Analyze Reviews'}
+          {isPending ? 'Reading App Store reviews...' : 'Analyze Reviews'}
         </button>
         <Link className="button button--ghost" href="/auth?next=/analysis&mode=signup">
           Register (3 Free)

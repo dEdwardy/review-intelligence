@@ -83,7 +83,7 @@ export default function PayPalCheckout({ config, configured }) {
 
   async function handleCopyEmail() {
     if (!email.trim()) return;
-    setCopyStatus('Copying…');
+    setCopyStatus('Copying...');
     try {
       await navigator.clipboard.writeText(email.trim());
       setCopyStatus('Copied');
@@ -147,7 +147,7 @@ export default function PayPalCheckout({ config, configured }) {
           disabled={busy}
           aria-busy={busy}
         >
-          {busy ? 'Opening PayPal…' : 'Pay with PayPal'}
+          {busy ? 'Opening PayPal...' : 'Pay with PayPal'}
         </button>
         <div className="auth-actions__secondary">
           <button
