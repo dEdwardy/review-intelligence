@@ -5,11 +5,12 @@ export async function GET(request) {
   const url = new URL(request.url);
   const code = url.searchParams.get('code');
   const next = url.searchParams.get('next') || '/';
-  const response = NextResponse.redirect(new URL(next, url.origin));
 
   if (!code) {
-    return NextResponse.redirect(new URL('/auth', url.origin));
+    return NextResponse.redirect(new URL(`/auth?next=${encodeURIComponent(next)}`, url.origin));
   }
+
+  const response = NextResponse.redirect(new URL(next, url.origin));
 
   const supabase = createServerClient(
     process.env.NEXT_PUBLIC_SUPABASE_URL,

@@ -19,6 +19,9 @@ export default function SessionActions({ userEmail, nextPath = '/' }) {
         <span className="text-link" title={userEmail}>
           {userEmail}
         </span>
+        <Link className="text-link" href="/pricing">
+          Pricing
+        </Link>
         <button className="text-link" type="button" onClick={handleSignOut}>
           Sign out
         </button>
