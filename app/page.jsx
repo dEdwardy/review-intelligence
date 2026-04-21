@@ -44,17 +44,23 @@ export default async function HomePage() {
 
       <section className="hero">
         <div className="hero__copy">
-          <div className="eyebrow">Review backlog, ordered</div>
-          <h1>See the complaint pattern before the next release slips.</h1>
+          <div className="eyebrow">Review signal, not noise</div>
+          <h1>Find the complaints worth fixing before the next release.</h1>
           <p>
-            Paste your App Store URL, pull recent reviews, compare competitor complaints, and leave
-            with a ranked fix list, reply drafts, and a summary you can drop into planning.
+            Paste one App Store URL, compare review patterns, and leave with a ranked fix list,
+            reply drafts, and a summary you can use in planning.
           </p>
 
           <div className="hero__meta">
             <span>One app, up to three competitors</span>
             <span>30 or 90 day windows</span>
             <span>Markdown and CSV exports</span>
+          </div>
+
+          <div className="hero__proof">
+            <span>3 free runs after sign-up</span>
+            <span>Exports in Markdown &amp; CSV</span>
+            <span>Compare up to 3 competitors</span>
           </div>
 
           <div className="hero__facts">
@@ -81,11 +87,11 @@ export default async function HomePage() {
               Open analyzer
             </Link>
             <Link href="/pricing" className="button button--ghost">
-              View launch price
+              View pricing
             </Link>
             {!isSignedIn ? (
               <Link href="/auth?next=/" className="button button--ghost">
-                Sign in for 3 free runs
+                Get 3 free runs
               </Link>
             ) : null}
             <Link href="#workflow" className="button button--ghost">

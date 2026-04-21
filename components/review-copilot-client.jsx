@@ -78,9 +78,9 @@ export default function ReviewCopilotClient() {
     <form className="input-form" action="/analysis" method="get" onSubmit={submit} noValidate>
       <div className="input-form__head">
         <div className="eyebrow">Run an analysis</div>
-        <h2>Paste one public App Store link and get the review story.</h2>
+        <h2>Paste one public App Store link and get a clear read on the reviews.</h2>
         <p className="hint">
-          Start with one app. Add competitors only if you want a side-by-side read.
+          Start with one app. Add competitors only when you need a side-by-side read.
         </p>
         <p className="hint">
           Sign-in required. New accounts get <strong>3 free analyses</strong> before upgrade.
