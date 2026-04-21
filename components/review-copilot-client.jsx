@@ -56,6 +56,8 @@ export default function ReviewCopilotClient() {
       setErrorMessage('Please enter a public App Store URL to continue.');
       return;
     }
+
+    setErrorMessage('');
     setIsPending(true);
     setPendingLabel('Loading your analysis');
   }
@@ -86,7 +88,7 @@ export default function ReviewCopilotClient() {
       </div>
 
       <div className="preset-actions">
-        {PRESETS.map((preset, index) => (
+        {PRESETS.map((preset) => (
           <button
             key={preset.label}
             className="preset-button"
@@ -106,9 +108,11 @@ export default function ReviewCopilotClient() {
           id="app-url"
           name="app"
           type="url"
+          inputMode="url"
+          autoComplete="off"
           value={appUrl}
           onChange={(event) => setAppUrl(event.target.value)}
-          placeholder="https://apps.apple.com/us/app/your-app/id123456789"
+          placeholder="https://apps.apple.com/us/app/your-app/id123456789..."
           required
         />
         <div className="field__hint">
@@ -129,9 +133,11 @@ export default function ReviewCopilotClient() {
             id="competitor-1"
             name="competitor-1"
             type="url"
+            inputMode="url"
+            autoComplete="off"
             value={competitor1}
             onChange={(event) => setCompetitor1(event.target.value)}
-            placeholder="Optional competitor URL"
+            placeholder="Optional competitor URL..."
           />
         </div>
         <div className="field">
@@ -140,9 +146,11 @@ export default function ReviewCopilotClient() {
             id="competitor-2"
             name="competitor-2"
             type="url"
+            inputMode="url"
+            autoComplete="off"
             value={competitor2}
             onChange={(event) => setCompetitor2(event.target.value)}
-            placeholder="Optional competitor URL"
+            placeholder="Optional competitor URL..."
           />
         </div>
       </div>
@@ -156,9 +164,11 @@ export default function ReviewCopilotClient() {
             id="competitor-3"
             name="competitor-3"
             type="url"
+            inputMode="url"
+            autoComplete="off"
             value={competitor3}
             onChange={(event) => setCompetitor3(event.target.value)}
-            placeholder="Optional competitor URL"
+            placeholder="Optional competitor URL..."
           />
         </div>
       </div>
@@ -207,13 +217,13 @@ export default function ReviewCopilotClient() {
 
       <div className="actions" aria-busy={isPending}>
         <button className="button button--primary" type="submit" disabled={isPending}>
-          {isPending ? 'Reading App Store reviews…' : 'Analyze reviews'}
+          {isPending ? 'Reading App Store reviews…' : 'Analyze Reviews'}
         </button>
         <Link className="button button--ghost" href="/auth?next=/analysis&mode=signup">
-          Register (3 free)
+          Register (3 Free)
         </Link>
         <a className="button button--ghost" href="#workflow">
-          View outputs
+          View Outputs
         </a>
       </div>
 
