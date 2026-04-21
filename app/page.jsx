@@ -44,10 +44,10 @@ export default async function HomePage() {
       <section className="hero">
         <div className="hero__copy">
           <div className="eyebrow">Review signal, not noise</div>
-          <h1>Find the complaints worth fixing before the next release.</h1>
+          <h1>Turn App Store reviews into shipping decisions.</h1>
           <p>
-            Paste one App Store URL, compare review patterns, and leave with a ranked fix list,
-            reply drafts, and a summary you can use in planning.
+            Paste one public App Store URL and get a ranked fix list, reply drafts, competitor gaps,
+            and a summary you can drop into planning.
           </p>
 
           <div className="hero__meta">
@@ -126,10 +126,43 @@ export default async function HomePage() {
         </div>
       </section>
 
+      <section className="sample-panel">
+        <div className="section-heading">
+          <span className="section-heading__kicker">Sample output</span>
+          <h2>See the kind of answer the tool gives before you spend a run.</h2>
+        </div>
+        <div className="sample-panel__grid">
+          <article className="sample-card">
+            <div className="sample-card__label">Top issue</div>
+            <h3>Slow sync and missing updates</h3>
+            <p>
+              Reviews point to users waiting on state changes and not trusting whether the last
+              action saved.
+            </p>
+          </article>
+          <article className="sample-card">
+            <div className="sample-card__label">Reply draft</div>
+            <h3>One response you can reuse</h3>
+            <p>
+              A short support reply that acknowledges the issue, asks for the minimum useful
+              details, and keeps the thread moving.
+            </p>
+          </article>
+          <article className="sample-card">
+            <div className="sample-card__label">Competitor gap</div>
+            <h3>Pricing complaints show up earlier elsewhere</h3>
+            <p>
+              Compare a rival and see where the same issue is already surfacing so you can catch it
+              before it becomes your own pattern.
+            </p>
+          </article>
+        </div>
+      </section>
+
       <section className="proof-panel">
         <div className="section-heading">
           <span className="section-heading__kicker">Why teams keep it open</span>
-          <h2>It turns scattered reviews into decisions people can actually act on.</h2>
+          <h2>It turns scattered reviews into decisions people can act on.</h2>
         </div>
         <div className="proof-panel__grid">
           <article className="proof-panel__item">

@@ -38,6 +38,8 @@ export default function AnalysisDashboard({ analysis, viewer }) {
   const hasCompetitors = analysis.competitors.length > 0;
   const hasIssueClusters = analysis.issueClusters.length > 0;
   const hasPraiseClusters = analysis.praiseClusters.length > 0;
+  const freeRemaining = Number(viewer?.freeRemaining) || 0;
+  const isPremium = viewer?.planStatus === 'premium';
 
   async function handleCopy(content, label) {
     setBusyAction(label);
@@ -77,12 +79,12 @@ export default function AnalysisDashboard({ analysis, viewer }) {
             <span>{analysis.ratingFilterLabel}</span>
             <span>{analysis.versionFilterLabel}</span>
             {viewer?.email ? <span>Signed in: {viewer.email}</span> : null}
-            {viewer?.planStatus === 'premium' ? (
+            {isPremium ? (
               <span>Plan: Pro</span>
             ) : viewer ? (
-              <span>Free left: {Number(viewer.freeRemaining) || 0}</span>
+              <span>Free left: {freeRemaining}</span>
             ) : null}
-            {viewer?.planStatus === 'premium' ? null : (
+            {isPremium ? null : (
               <a className="text-link" href="/pricing?upgrade=1">
                 Upgrade
               </a>
@@ -118,6 +120,17 @@ export default function AnalysisDashboard({ analysis, viewer }) {
             </div>
           </div>
         </div>
+
+        <section className="summary-strip">
+          <div className="summary-strip__item">
+            <div className="summary-strip__label">What users feel</div>
+            <div className="summary-strip__value">{analysis.overview.headline}</div>
+          </div>
+          <div className="summary-strip__item">
+            <div className="summary-strip__label">What to do next</div>
+            <div className="summary-strip__value">{analysis.weeklySummary}</div>
+          </div>
+        </section>
 
         <div className="tabbar" role="tablist" aria-label="Analysis tabs">
           {TABS.map(([value, label]) => (

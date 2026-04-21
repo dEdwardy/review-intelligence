@@ -52,8 +52,8 @@ export default async function PricingPage() {
           <div className="eyebrow">Launch price</div>
           <h1>{config.productName}</h1>
           <p className="pricing-card__lede">
-            An early-access one-time purchase for teams that want to inspect public App Store
-            reviews, identify recurring issues, and leave with a report they can use right away.
+            An early-access one-time purchase for teams that want to turn public App Store reviews
+            into a ranked fix list, reply drafts, and competitor gaps they can use in planning.
           </p>
 
           <div className="pricing-card__price">
@@ -85,6 +85,11 @@ export default async function PricingPage() {
               </article>
             ))}
           </div>
+
+          <div className="pricing-note">
+            Paddle checkout is still under review, so this page stays in a ready-to-buy state until
+            the approved flow is enabled.
+          </div>
         </div>
 
         <aside className="pricing-card pricing-card--panel">
@@ -96,10 +101,10 @@ export default async function PricingPage() {
           <div className="eyebrow">Checkout</div>
           <div className="pricing-panel__shell">
             <div className="pricing-panel__status">
-              <span className="pricing-panel__badge">Coming soon</span>
+              <span className="pricing-panel__badge">Paddle review</span>
               <h2>Unlock Pro</h2>
               <p className="hint">
-                Checkout is temporarily hidden while we switch payment processors.
+                Checkout is temporarily hidden while Paddle approval is in progress.
               </p>
             </div>
 
@@ -107,7 +112,9 @@ export default async function PricingPage() {
               <button className="button button--primary button--compact" type="button" disabled>
                 Unlock Pro
               </button>
-              <span className="pricing-panel__caption">Upgrade to Pro (coming soon).</span>
+              <span className="pricing-panel__caption">
+                Upgrade to Pro after the approval flow is enabled.
+              </span>
             </div>
           </div>
         </aside>
