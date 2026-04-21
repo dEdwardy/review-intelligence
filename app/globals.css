@@ -413,9 +413,11 @@ button.text-link {
 
 .button--compact {
   width: fit-content;
-  min-width: 148px;
-  min-height: 40px;
-  padding: 0 14px;
+  min-width: 136px;
+  min-height: 38px;
+  padding: 0 12px;
+  border-radius: 14px;
+  box-shadow: 0 8px 18px rgba(0, 0, 0, 0.18);
 }
 
 .button--ghost,
@@ -496,6 +498,50 @@ button.text-link {
   background:
     linear-gradient(180deg, rgba(255, 255, 255, 0.015), rgba(255, 255, 255, 0.01)),
     rgba(255, 255, 255, 0.015);
+}
+
+.pricing-panel__shell {
+  display: grid;
+  gap: 16px;
+  padding: 18px;
+  border: 1px solid var(--line);
+  border-radius: 20px;
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.035), rgba(255, 255, 255, 0.012)),
+    rgba(0, 0, 0, 0.14);
+}
+
+.pricing-panel__status {
+  display: grid;
+  gap: 10px;
+}
+
+.pricing-panel__badge {
+  width: fit-content;
+  padding: 6px 10px;
+  border-radius: 999px;
+  border: 1px solid rgba(214, 181, 119, 0.28);
+  background: rgba(214, 181, 119, 0.12);
+  color: var(--accent);
+  font-size: 0.68rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  font-weight: 700;
+}
+
+.pricing-panel__status h2 {
+  font-size: clamp(1.25rem, 2.2vw, 1.55rem);
+}
+
+.pricing-panel__cta {
+  display: grid;
+  gap: 10px;
+  justify-items: start;
+}
+
+.pricing-panel__caption {
+  color: var(--muted);
+  font-size: 0.78rem;
 }
 
 .pricing-card--success {

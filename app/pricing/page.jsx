@@ -81,12 +81,22 @@ export default async function PricingPage() {
             </Link>
           </div>
           <div className="eyebrow">Checkout</div>
-          <h2>Unlock Pro</h2>
-          <p className="hint">Payments coming soon.</p>
-          <button className="button button--primary button--compact" type="button" disabled>
-            Unlock Pro
-          </button>
-          <div className="pricing-note">Upgrade to Pro (coming soon).</div>
+          <div className="pricing-panel__shell">
+            <div className="pricing-panel__status">
+              <span className="pricing-panel__badge">Coming soon</span>
+              <h2>Unlock Pro</h2>
+              <p className="hint">
+                Checkout is temporarily hidden while we switch payment processors.
+              </p>
+            </div>
+
+            <div className="pricing-panel__cta">
+              <button className="button button--primary button--compact" type="button" disabled>
+                Unlock Pro
+              </button>
+              <span className="pricing-panel__caption">Upgrade to Pro (coming soon).</span>
+            </div>
+          </div>
         </aside>
       </section>
     </main>
