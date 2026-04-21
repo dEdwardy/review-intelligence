@@ -116,6 +116,27 @@ export default async function HomePage() {
         </div>
       </section>
 
+      <section className="proof-panel">
+        <div className="section-heading">
+          <span className="section-heading__kicker">Why teams keep it open</span>
+          <h2>It turns scattered reviews into decisions people can actually act on.</h2>
+        </div>
+        <div className="proof-panel__grid">
+          <article className="proof-panel__item">
+            <div className="proof-panel__label">Before</div>
+            <p>Hundreds of reviews spread across bugs, feature requests, and support complaints.</p>
+          </article>
+          <article className="proof-panel__item">
+            <div className="proof-panel__label">After</div>
+            <p>A ranked set of problems, reply drafts, and a weekly summary ready for planning.</p>
+          </article>
+          <article className="proof-panel__item">
+            <div className="proof-panel__label">Decision</div>
+            <p>Compare your app against competitors and see where users feel the pain first.</p>
+          </article>
+        </div>
+      </section>
+
       <section className="workflow" id="workflow">
         <div className="section-heading">
           <span className="section-heading__kicker">What the run returns</span>
