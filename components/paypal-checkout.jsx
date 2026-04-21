@@ -42,8 +42,10 @@ export default function PayPalCheckout({ config, configured }) {
       setMessage('Add PayPal credentials first.');
       return;
     }
+
     setBusy(true);
     setMessage('');
+
     try {
       const response = await fetch('/api/paypal/create-order', {
         method: 'POST',
@@ -99,7 +101,8 @@ export default function PayPalCheckout({ config, configured }) {
         )}&currency=${encodeURIComponent(config.currency)}&intent=capture`}
         strategy="afterInteractive"
       />
-      <div className="field__hint" style={{ marginBottom: 12 }}>
+
+      <div className="field__hint paypal-box__account" style={{ marginBottom: 12 }}>
         {signedInEmail ? (
           <>
             Signed in as <strong>{signedInEmail}</strong>. This purchase upgrades this account.
@@ -117,6 +120,7 @@ export default function PayPalCheckout({ config, configured }) {
           </>
         )}
       </div>
+
       <div className="field">
         <label htmlFor="pay-email">Email for PayPal receipt (optional)</label>
         <input
@@ -125,7 +129,8 @@ export default function PayPalCheckout({ config, configured }) {
           type="email"
           inputMode="email"
           autoComplete="email"
-          placeholder="you@company.com"
+          spellCheck={false}
+          placeholder="you@company.com..."
           value={email}
           onChange={(event) => setEmail(event.target.value)}
         />
@@ -151,10 +156,10 @@ export default function PayPalCheckout({ config, configured }) {
             onClick={handleCopyEmail}
             disabled={!email.trim() || busy}
           >
-            {copyStatus || 'Copy receipt email'}
+            {copyStatus || 'Copy Receipt Email'}
           </button>
           <Link className="button button--ghost" href="/auth?next=/pricing">
-            Update account
+            Update Account
           </Link>
         </div>
       </div>

@@ -77,6 +77,10 @@ header {
   padding-top: 22px;
 }
 
+.auth-shell {
+  width: min(920px, calc(100% - 32px));
+  padding-top: 48px;
+}
 .shell--analysis {
   padding-top: 20px;
 }
@@ -171,6 +175,7 @@ h3 {
   font-family: var(--font-display), sans-serif;
   line-height: 1;
   letter-spacing: -0.03em;
+  text-wrap: balance;
 }
 
 h1 {
@@ -285,17 +290,21 @@ button.text-link {
   display: flex;
   align-items: center;
   gap: 14px;
+  flex-wrap: wrap;
 }
 
 .button {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  min-height: 44px;
-  padding: 0 16px;
+  min-height: 46px;
+  padding: 0 18px;
   border-radius: 999px;
   border: 1px solid var(--line);
   cursor: pointer;
+  font-size: 0.94rem;
+  font-weight: 600;
+  white-space: nowrap;
   transition:
     background 140ms ease,
     border-color 140ms ease,
@@ -406,6 +415,85 @@ button.text-link {
   margin: 0 auto;
 }
 
+.auth-card {
+  display: grid;
+  grid-template-columns: minmax(0, 0.95fr) minmax(320px, 0.9fr);
+  gap: 28px;
+  padding: 30px;
+  border: 1px solid var(--line);
+  border-radius: 28px;
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.03), rgba(255, 255, 255, 0.01)),
+    rgba(19, 22, 25, 0.95);
+  box-shadow: var(--shadow);
+}
+
+.auth-card__intro,
+.auth-form {
+  display: grid;
+  align-content: start;
+}
+
+.auth-card__intro {
+  gap: 16px;
+  padding-right: 8px;
+}
+
+.auth-card__title {
+  max-width: 12ch;
+  font-size: clamp(2.4rem, 5vw, 4rem);
+}
+
+.auth-card__lede {
+  max-width: 42ch;
+  color: var(--muted);
+  line-height: 1.72;
+}
+
+.auth-mode-switch {
+  display: inline-flex;
+  gap: 8px;
+  padding: 6px;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.02);
+  width: fit-content;
+}
+
+.auth-mode-switch__item {
+  min-height: 38px;
+  padding: 0 16px;
+  border: 1px solid transparent;
+  border-radius: 999px;
+  background: transparent;
+  color: var(--muted);
+  cursor: pointer;
+  transition:
+    background 140ms ease,
+    border-color 140ms ease,
+    color 140ms ease;
+}
+
+.auth-mode-switch__item--active {
+  border-color: rgba(214, 181, 119, 0.28);
+  background: rgba(214, 181, 119, 0.14);
+  color: var(--text);
+}
+
+.auth-highlights {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.auth-highlights span {
+  padding: 8px 12px;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.02);
+  color: #ddd4c6;
+  font-size: 0.82rem;
+}
 .pricing-card__lede {
   max-width: 46ch;
   color: var(--muted);
@@ -442,13 +530,17 @@ button.text-link {
 
 .paypal-box {
   display: grid;
-  gap: 12px;
+  gap: 14px;
+}
+
+.paypal-box__account {
+  line-height: 1.6;
 }
 
 .auth-actions {
   display: grid;
-  gap: 12px;
-  margin-top: 4px;
+  gap: 14px;
+  margin-top: 6px;
 }
 
 .auth-actions__submit {
@@ -551,17 +643,17 @@ button.text-link {
 
 .preset-button {
   width: 100%;
-  min-height: 40px;
-  padding: 0 14px;
+  min-height: 46px;
+  padding: 0 16px;
   border-radius: 999px;
   border: 1px solid var(--line);
   display: inline-flex;
   align-items: center;
   justify-content: center;
   text-align: center;
-  line-height: 1;
+  line-height: 1.2;
   font-weight: 600;
-  white-space: nowrap;
+  white-space: normal;
   transition:
     background 140ms ease,
     border-color 140ms ease,
@@ -577,7 +669,7 @@ button.text-link {
 
 .field {
   display: grid;
-  gap: 8px;
+  gap: 10px;
 }
 
 .field label {
@@ -589,8 +681,8 @@ button.text-link {
 .field input,
 .field select {
   width: 100%;
-  min-height: 52px;
-  padding: 0 16px;
+  min-height: 56px;
+  padding: 0 18px;
   border-radius: 12px;
   border: 1px solid rgba(255, 255, 255, 0.1);
   background:
@@ -598,6 +690,7 @@ button.text-link {
     rgba(0, 0, 0, 0.16);
   color: var(--text);
   outline: none;
+  font-size: 0.96rem;
 }
 
 .field select {
@@ -677,12 +770,12 @@ button.text-link {
 .field__hint,
 .inline-status {
   color: var(--muted);
-  font-size: 0.82rem;
+  font-size: 0.84rem;
   line-height: 1.5;
 }
 
 .inline-status {
-  padding-left: 2px;
+  padding: 2px 2px 0;
 }
 
 .form-error {
@@ -986,7 +1079,8 @@ button.text-link {
 @media (max-width: 1080px) {
   .hero,
   .dashboard__grid,
-  .pricing-layout {
+  .pricing-layout,
+  .auth-card {
     grid-template-columns: 1fr;
   }
 
@@ -1031,7 +1125,8 @@ button.text-link {
   .hero__aside,
   .workflow,
   .dashboard,
-  .panel {
+  .panel,
+  .auth-card {
     padding: 18px;
   }
 
@@ -1059,6 +1154,18 @@ button.text-link {
     padding: 20px;
   }
 
+  .auth-card__title {
+    max-width: none;
+    font-size: clamp(2rem, 10vw, 2.8rem);
+  }
+
+  .auth-mode-switch {
+    width: 100%;
+  }
+
+  .auth-mode-switch__item {
+    flex: 1 1 0;
+  }
   .tabbar {
     width: 100%;
     overflow-x: auto;

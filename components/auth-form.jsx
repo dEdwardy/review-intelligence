@@ -23,11 +23,13 @@ export default function AuthForm() {
     setBusy(true);
     setMessage('');
     setIsError(false);
+
     const redirectTo = `${window.location.origin}/auth/callback?next=${encodeURIComponent(nextPath)}`;
     const authRequest =
       mode === 'signin'
         ? supabase.auth.signInWithPassword({ email, password })
         : supabase.auth.signUp({ email, password, options: { emailRedirectTo: redirectTo } });
+
     const { data, error } = await authRequest;
     setBusy(false);
     setIsError(Boolean(error));
@@ -38,6 +40,7 @@ export default function AuthForm() {
           ? 'Signed in.'
           : 'Check your email to finish registration.'
     );
+
     if (!error && data?.session?.access_token && data?.session?.refresh_token) {
       await fetch('/auth/session', {
         method: 'POST',
@@ -48,6 +51,7 @@ export default function AuthForm() {
         }),
       });
     }
+
     if (!error && (mode === 'signin' || (mode === 'signup' && data?.session))) {
       setMessage('Redirecting…');
       window.location.href = nextPath;
@@ -55,41 +59,78 @@ export default function AuthForm() {
   }
 
   return (
-    <main className="shell shell--landing">
-      <section className="pricing-card pricing-card--success">
-        <div className="eyebrow">Account</div>
-        <h1>{mode === 'signin' ? 'Sign in to continue.' : 'Create your account.'}</h1>
-        <p className="pricing-card__lede">
-          Login is required to run analyses. New accounts start with 3 free runs. After that, you
-          will be asked to upgrade.
-        </p>
+    <main className="shell shell--landing auth-shell">
+      <section className="auth-card">
+        <div className="auth-card__intro">
+          <div className="eyebrow">Account Access</div>
+          <h1 className="auth-card__title">
+            {mode === 'signin'
+              ? 'Return to your review workspace.'
+              : 'Create an account for 3 free runs.'}
+          </h1>
+          <p className="auth-card__lede">
+            Sign in to run analyses, save quota usage, and unlock paid access after the free tier is
+            exhausted.
+          </p>
+          <div className="auth-mode-switch" role="tablist" aria-label="Authentication mode">
+            <button
+              className={`auth-mode-switch__item ${mode === 'signin' ? 'auth-mode-switch__item--active' : ''}`}
+              type="button"
+              onClick={() => setMode('signin')}
+            >
+              Sign In
+            </button>
+            <button
+              className={`auth-mode-switch__item ${mode === 'signup' ? 'auth-mode-switch__item--active' : ''}`}
+              type="button"
+              onClick={() => setMode('signup')}
+            >
+              Create Account
+            </button>
+          </div>
+          <div className="auth-highlights" aria-label="Benefits">
+            <span>3 free analyses per account</span>
+            <span>Email confirmation required</span>
+            <span>PayPal upgrade after quota ends</span>
+          </div>
+        </div>
+
         <form onSubmit={handleSubmit} className="auth-form">
           <div className="field">
             <label htmlFor="email">Email</label>
             <input
               id="email"
+              name="email"
               type="email"
               inputMode="email"
               autoComplete="email"
+              spellCheck={false}
               value={email}
-              onChange={(e) => setEmail(e.target.value)}
+              onChange={(event) => setEmail(event.target.value)}
               disabled={busy}
+              placeholder="you@company.com..."
               required
             />
           </div>
+
           <div className="field">
             <label htmlFor="password">Password</label>
             <input
               id="password"
+              name="password"
               type="password"
               autoComplete={mode === 'signin' ? 'current-password' : 'new-password'}
               minLength={6}
               value={password}
-              onChange={(e) => setPassword(e.target.value)}
+              onChange={(event) => setPassword(event.target.value)}
               disabled={busy}
+              placeholder={
+                mode === 'signin' ? 'Enter your password...' : 'Use at least 6 characters...'
+              }
               required
             />
           </div>
+
           <div className="auth-actions">
             <button
               className="button button--primary auth-actions__submit"
@@ -97,7 +138,7 @@ export default function AuthForm() {
               disabled={busy}
               aria-busy={busy}
             >
-              {busy ? 'Working…' : mode === 'signin' ? 'Sign in' : 'Create account'}
+              {busy ? 'Working…' : mode === 'signin' ? 'Sign In' : 'Create Account'}
             </button>
             <div className="auth-actions__secondary">
               <button
@@ -106,19 +147,21 @@ export default function AuthForm() {
                 disabled={busy}
                 onClick={() => setMode(mode === 'signin' ? 'signup' : 'signin')}
               >
-                Switch to {mode === 'signin' ? 'sign up' : 'sign in'}
+                Switch to {mode === 'signin' ? 'Sign Up' : 'Sign In'}
               </button>
               <Link href="/pricing" className="button button--ghost">
-                View pricing
+                View Pricing
               </Link>
             </div>
           </div>
         </form>
+
         {message ? (
           <div className="inline-status" role={isError ? 'alert' : 'status'} aria-live="polite">
             {message}
           </div>
         ) : null}
+
         <div className="auth-footer-link">
           <Link href={nextPath} className="text-link">
             Back to previous page
