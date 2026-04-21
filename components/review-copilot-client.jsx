@@ -65,6 +65,9 @@ export default function ReviewCopilotClient() {
         <p className="hint">
           Start with one app. Add competitors only if you want a side-by-side read.
         </p>
+        <p className="hint">
+          Sign-in required. New accounts get <strong>3 free analyses</strong> before upgrade.
+        </p>
       </div>
 
       <div className="preset-actions">
@@ -144,7 +147,10 @@ export default function ReviewCopilotClient() {
             placeholder="Optional competitor URL"
           />
         </div>
-        <div className="field-grid field-grid--compact">
+      </div>
+
+      <div className="field field--filters field--filters--full">
+        <div className="field-grid field-grid--compact field-grid--filters">
           <div className="field">
             <label htmlFor="days">Window</label>
             <select
@@ -189,6 +195,9 @@ export default function ReviewCopilotClient() {
         <button className="button button--primary" type="submit" disabled={isPending}>
           {isPending ? 'Reading App Store reviews...' : 'Analyze reviews'}
         </button>
+        <Link className="button button--ghost" href="/auth?next=/analysis&mode=signup">
+          Register (3 free)
+        </Link>
         <a className="button button--ghost" href="#workflow">
           View outputs
         </a>

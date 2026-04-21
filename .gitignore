@@ -7,3 +7,6 @@ coverage
 .vercel
 .husky/_
 .eslintcache
+.playwright-cli
+ui-check*.png
+ui-select-final.png

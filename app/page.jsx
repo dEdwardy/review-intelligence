@@ -1,5 +1,8 @@
 import Link from 'next/link';
 import ReviewCopilotClient from '../components/review-copilot-client.jsx';
+import SessionActions from '../components/session-actions.jsx';
+import { getProjectDisplayName } from '../lib/app-config.js';
+import { getSupabaseServerClient } from '../lib/supabase/server.js';
 
 const REFERENCE_LINKS = [
   {
@@ -12,20 +15,31 @@ const REFERENCE_LINKS = [
   },
 ];
 
-export default function HomePage() {
+export default async function HomePage() {
+  const supabase = await getSupabaseServerClient();
+  const { data } = await supabase.auth.getUser();
+  const projectName = getProjectDisplayName();
+  const isSignedIn = Boolean(data?.user);
+
   return (
     <main className="shell shell--landing">
       <header className="masthead">
         <div className="brand-lockup">
           <span className="brand-lockup__mark" />
           <div>
-            <div className="brand-lockup__name">Review Copilot</div>
+            <div className="brand-lockup__name">{projectName}</div>
             <div className="brand-lockup__subhead">
               App Store review intelligence for indie teams
             </div>
           </div>
         </div>
         <div className="masthead__note">Apple App Store only</div>
+        <div className="masthead__links">
+          <Link className="text-link" href="/pricing">
+            Pricing
+          </Link>
+        </div>
+        <SessionActions userEmail={data?.user?.email ?? ''} nextPath="/" />
       </header>
 
       <section className="hero">
@@ -66,6 +80,14 @@ export default function HomePage() {
             <Link href="#analyze" className="button button--primary">
               Open analyzer
             </Link>
+            <Link href="/pricing" className="button button--ghost">
+              View launch price
+            </Link>
+            {!isSignedIn ? (
+              <Link href="/auth?next=/" className="button button--ghost">
+                Sign in for 3 free runs
+              </Link>
+            ) : null}
             <Link href="#workflow" className="button button--ghost">
               See the flow
             </Link>

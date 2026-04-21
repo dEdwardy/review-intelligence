@@ -3,6 +3,7 @@
 import { useMemo, useState } from 'react';
 import { buildMarkdownReport } from '../lib/export/markdown.js';
 import { buildCsvReport } from '../lib/export/csv.js';
+import { getStoragePrefix } from '../lib/app-config.js';
 
 function downloadText(filename, content, type = 'text/plain;charset=utf-8') {
   const blob = new Blob([content], { type });
@@ -25,7 +26,7 @@ const TABS = [
   ['export', 'Export'],
 ];
 
-export default function AnalysisDashboard({ analysis }) {
+export default function AnalysisDashboard({ analysis, viewer }) {
   const [activeTab, setActiveTab] = useState('overview');
 
   const markdown = useMemo(() => buildMarkdownReport(analysis), [analysis]);
@@ -50,6 +51,17 @@ export default function AnalysisDashboard({ analysis }) {
             <span>{analysis.timeRangeDays} day window</span>
             <span>{analysis.ratingFilterLabel}</span>
             <span>{analysis.versionFilterLabel}</span>
+            {viewer?.email ? <span>Signed in: {viewer.email}</span> : null}
+            {viewer?.planStatus === 'premium' ? (
+              <span>Plan: Pro</span>
+            ) : viewer ? (
+              <span>Free left: {Number(viewer.freeRemaining) || 0}</span>
+            ) : null}
+            {viewer?.planStatus === 'premium' ? null : (
+              <a className="text-link" href="/pricing?upgrade=1">
+                Upgrade
+              </a>
+            )}
           </div>
         </div>
 
@@ -281,7 +293,7 @@ export default function AnalysisDashboard({ analysis }) {
               <button
                 className="button button--ghost"
                 type="button"
-                onClick={() => downloadText('review-copilot-report.md', markdown)}
+                onClick={() => downloadText(`${getStoragePrefix()}-report.md`, markdown)}
               >
                 Download Markdown
               </button>
@@ -289,7 +301,7 @@ export default function AnalysisDashboard({ analysis }) {
                 className="button button--ghost"
                 type="button"
                 onClick={() =>
-                  downloadText('review-copilot-report.csv', csv, 'text/csv;charset=utf-8')
+                  downloadText(`${getStoragePrefix()}-report.csv`, csv, 'text/csv;charset=utf-8')
                 }
               >
                 Download CSV
