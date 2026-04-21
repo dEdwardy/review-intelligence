@@ -28,6 +28,7 @@ const TABS = [
 
 export default function AnalysisDashboard({ analysis, viewer }) {
   const [activeTab, setActiveTab] = useState('overview');
+  const [busyAction, setBusyAction] = useState('');
 
   const markdown = useMemo(() => buildMarkdownReport(analysis), [analysis]);
   const csv = useMemo(() => buildCsvReport(analysis), [analysis]);
@@ -36,6 +37,24 @@ export default function AnalysisDashboard({ analysis, viewer }) {
   const hasCompetitors = analysis.competitors.length > 0;
   const hasIssueClusters = analysis.issueClusters.length > 0;
   const hasPraiseClusters = analysis.praiseClusters.length > 0;
+
+  async function handleCopy(content, label) {
+    setBusyAction(label);
+    try {
+      await copyText(content);
+    } finally {
+      window.setTimeout(() => setBusyAction(''), 900);
+    }
+  }
+
+  async function handleDownload(filename, content, type, label) {
+    setBusyAction(label);
+    try {
+      downloadText(filename, content, type);
+    } finally {
+      window.setTimeout(() => setBusyAction(''), 900);
+    }
+  }
 
   return (
     <main className="shell shell--analysis">
@@ -286,32 +305,52 @@ export default function AnalysisDashboard({ analysis, viewer }) {
               <button
                 className="button button--primary"
                 type="button"
-                onClick={() => copyText(markdown)}
+                disabled={Boolean(busyAction)}
+                aria-busy={busyAction === 'Copy Markdown'}
+                onClick={() => handleCopy(markdown, 'Copy Markdown')}
               >
-                Copy Markdown
+                {busyAction === 'Copy Markdown' ? 'Copying…' : 'Copy Markdown'}
               </button>
               <button
                 className="button button--ghost"
                 type="button"
-                onClick={() => downloadText(`${getStoragePrefix()}-report.md`, markdown)}
-              >
-                Download Markdown
-              </button>
-              <button
-                className="button button--ghost"
-                type="button"
+                disabled={Boolean(busyAction)}
+                aria-busy={busyAction === 'Download Markdown'}
                 onClick={() =>
-                  downloadText(`${getStoragePrefix()}-report.csv`, csv, 'text/csv;charset=utf-8')
+                  handleDownload(
+                    `${getStoragePrefix()}-report.md`,
+                    markdown,
+                    'text/plain;charset=utf-8',
+                    'Download Markdown'
+                  )
                 }
               >
-                Download CSV
+                {busyAction === 'Download Markdown' ? 'Downloading…' : 'Download Markdown'}
               </button>
               <button
                 className="button button--ghost"
                 type="button"
-                onClick={() => copyText(analysis.weeklySummary)}
+                disabled={Boolean(busyAction)}
+                aria-busy={busyAction === 'Download CSV'}
+                onClick={() =>
+                  handleDownload(
+                    `${getStoragePrefix()}-report.csv`,
+                    csv,
+                    'text/csv;charset=utf-8',
+                    'Download CSV'
+                  )
+                }
               >
-                Copy Weekly Summary
+                {busyAction === 'Download CSV' ? 'Downloading…' : 'Download CSV'}
+              </button>
+              <button
+                className="button button--ghost"
+                type="button"
+                disabled={Boolean(busyAction)}
+                aria-busy={busyAction === 'Copy Weekly Summary'}
+                onClick={() => handleCopy(analysis.weeklySummary, 'Copy Weekly Summary')}
+              >
+                {busyAction === 'Copy Weekly Summary' ? 'Copying…' : 'Copy Weekly Summary'}
               </button>
             </div>
 

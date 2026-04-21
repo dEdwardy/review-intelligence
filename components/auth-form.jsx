@@ -49,6 +49,7 @@ export default function AuthForm() {
       });
     }
     if (!error && (mode === 'signin' || (mode === 'signup' && data?.session))) {
+      setMessage('Redirecting…');
       window.location.href = nextPath;
     }
   }
@@ -89,17 +90,28 @@ export default function AuthForm() {
               required
             />
           </div>
-          <div className="actions">
-            <button className="button button--primary" type="submit" disabled={busy}>
-              {busy ? 'Working...' : mode === 'signin' ? 'Sign in' : 'Create account'}
-            </button>
+          <div className="auth-actions">
             <button
-              className="button button--ghost"
-              type="button"
-              onClick={() => setMode(mode === 'signin' ? 'signup' : 'signin')}
+              className="button button--primary auth-actions__submit"
+              type="submit"
+              disabled={busy}
+              aria-busy={busy}
             >
-              Switch to {mode === 'signin' ? 'sign up' : 'sign in'}
+              {busy ? 'Working…' : mode === 'signin' ? 'Sign in' : 'Create account'}
             </button>
+            <div className="auth-actions__secondary">
+              <button
+                className="button button--ghost"
+                type="button"
+                disabled={busy}
+                onClick={() => setMode(mode === 'signin' ? 'signup' : 'signin')}
+              >
+                Switch to {mode === 'signin' ? 'sign up' : 'sign in'}
+              </button>
+              <Link href="/pricing" className="button button--ghost">
+                View pricing
+              </Link>
+            </div>
           </div>
         </form>
         {message ? (
@@ -107,12 +119,9 @@ export default function AuthForm() {
             {message}
           </div>
         ) : null}
-        <div className="hero__links">
-          <Link href="/pricing" className="button button--ghost">
-            View pricing
-          </Link>
-          <Link href={nextPath} className="button button--ghost">
-            Back
+        <div className="auth-footer-link">
+          <Link href={nextPath} className="text-link">
+            Back to previous page
           </Link>
         </div>
       </section>

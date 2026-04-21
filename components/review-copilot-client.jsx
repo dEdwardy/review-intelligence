@@ -2,6 +2,7 @@
 
 import { useMemo, useState } from 'react';
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 
 const REFERENCE_URLS = [
   'https://apps.apple.com/us/app/slack-business-communication/id618783545',
@@ -28,6 +29,7 @@ const PRESETS = [
 ];
 
 export default function ReviewCopilotClient() {
+  const router = useRouter();
   const [appUrl, setAppUrl] = useState('');
   const [competitor1, setCompetitor1] = useState('');
   const [competitor2, setCompetitor2] = useState('');
@@ -38,6 +40,7 @@ export default function ReviewCopilotClient() {
   const [isPending, setIsPending] = useState(false);
   const [pendingLabel, setPendingLabel] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
+  const [presetBusy, setPresetBusy] = useState('');
 
   const competitors = useMemo(
     () => [competitor1, competitor2, competitor3].filter((item) => item.trim()),
@@ -57,6 +60,18 @@ export default function ReviewCopilotClient() {
     setPendingLabel('Loading your analysis');
   }
 
+  function loadPreset(preset) {
+    setPresetBusy(preset.label);
+    const params = new URLSearchParams({
+      app: preset.app,
+      competitors: preset.competitors.join(','),
+      days: preset.days,
+      ratings: preset.ratings,
+      version: preset.version,
+    });
+    router.push(`/analysis?${params.toString()}`);
+  }
+
   return (
     <form className="input-form" action="/analysis" method="get" onSubmit={submit} noValidate>
       <div className="input-form__head">
@@ -72,17 +87,16 @@ export default function ReviewCopilotClient() {
 
       <div className="preset-actions">
         {PRESETS.map((preset, index) => (
-          <Link
+          <button
             key={preset.label}
             className="preset-button"
-            href={`/analysis?app=${encodeURIComponent(preset.app)}&competitors=${encodeURIComponent(
-              preset.competitors.join(',')
-            )}&days=${encodeURIComponent(preset.days)}&ratings=${encodeURIComponent(
-              preset.ratings
-            )}&version=${encodeURIComponent(preset.version)}`}
+            type="button"
+            disabled={Boolean(presetBusy)}
+            aria-busy={presetBusy === preset.label}
+            onClick={() => loadPreset(preset)}
           >
-            {preset.label}
-          </Link>
+            {presetBusy === preset.label ? 'Loading…' : preset.label}
+          </button>
         ))}
       </div>
 
@@ -193,7 +207,7 @@ export default function ReviewCopilotClient() {
 
       <div className="actions" aria-busy={isPending}>
         <button className="button button--primary" type="submit" disabled={isPending}>
-          {isPending ? 'Reading App Store reviews...' : 'Analyze reviews'}
+          {isPending ? 'Reading App Store reviews…' : 'Analyze reviews'}
         </button>
         <Link className="button button--ghost" href="/auth?next=/analysis&mode=signup">
           Register (3 free)

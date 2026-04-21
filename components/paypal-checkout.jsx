@@ -16,6 +16,7 @@ export default function PayPalCheckout({ config, configured }) {
   );
   const [message, setMessage] = useState('');
   const [busy, setBusy] = useState(false);
+  const [copyStatus, setCopyStatus] = useState('');
 
   useEffect(() => {
     let cancelled = false;
@@ -78,6 +79,18 @@ export default function PayPalCheckout({ config, configured }) {
     }
   }
 
+  async function handleCopyEmail() {
+    if (!email.trim()) return;
+    setCopyStatus('Copying…');
+    try {
+      await navigator.clipboard.writeText(email.trim());
+      setCopyStatus('Copied');
+    } catch {
+      setCopyStatus('Copy failed');
+    }
+    window.setTimeout(() => setCopyStatus(''), 1600);
+  }
+
   return (
     <div className="paypal-box">
       <Script
@@ -121,14 +134,30 @@ export default function PayPalCheckout({ config, configured }) {
         </div>
       </div>
 
-      <button
-        className="button button--primary"
-        type="button"
-        onClick={handleCheckout}
-        disabled={busy}
-      >
-        {busy ? 'Opening PayPal...' : 'Pay with PayPal'}
-      </button>
+      <div className="auth-actions">
+        <button
+          className="button button--primary auth-actions__submit"
+          type="button"
+          onClick={handleCheckout}
+          disabled={busy}
+          aria-busy={busy}
+        >
+          {busy ? 'Opening PayPal…' : 'Pay with PayPal'}
+        </button>
+        <div className="auth-actions__secondary">
+          <button
+            className="button button--ghost"
+            type="button"
+            onClick={handleCopyEmail}
+            disabled={!email.trim() || busy}
+          >
+            {copyStatus || 'Copy receipt email'}
+          </button>
+          <Link className="button button--ghost" href="/auth?next=/pricing">
+            Update account
+          </Link>
+        </div>
+      </div>
 
       <div className="field__hint">
         {configured ? 'PayPal is ready.' : 'Checkout is inactive until credentials are set.'}

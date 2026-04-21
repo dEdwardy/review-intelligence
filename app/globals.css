@@ -299,7 +299,15 @@ button.text-link {
   transition:
     background 140ms ease,
     border-color 140ms ease,
-    color 140ms ease;
+    color 140ms ease,
+    opacity 140ms ease,
+    transform 140ms ease;
+}
+
+.button:disabled,
+.preset-button:disabled {
+  cursor: progress;
+  opacity: 0.72;
 }
 
 .button--primary {
@@ -437,6 +445,30 @@ button.text-link {
   gap: 12px;
 }
 
+.auth-actions {
+  display: grid;
+  gap: 12px;
+  margin-top: 4px;
+}
+
+.auth-actions__submit {
+  width: 100%;
+}
+
+.auth-actions__secondary {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.auth-actions__secondary .button {
+  flex: 1 1 180px;
+}
+
+.auth-footer-link {
+  margin-top: 4px;
+}
+
 .pricing-note,
 .pricing-summary {
   border: 1px solid var(--line);
@@ -530,6 +562,17 @@ button.text-link {
   line-height: 1;
   font-weight: 600;
   white-space: nowrap;
+  transition:
+    background 140ms ease,
+    border-color 140ms ease,
+    color 140ms ease,
+    opacity 140ms ease,
+    transform 140ms ease;
+}
+
+.button:active,
+.preset-button:active {
+  transform: translateY(1px);
 }
 
 .field {
@@ -957,6 +1000,7 @@ button.text-link {
   .field-grid,
   .field-grid--compact,
   .preset-actions,
+  .auth-actions__secondary,
   .skeleton-grid {
     grid-template-columns: 1fr 1fr;
   }
@@ -996,6 +1040,7 @@ button.text-link {
   .field-grid,
   .field-grid--compact,
   .preset-actions,
+  .auth-actions__secondary,
   .skeleton-grid,
   .pricing-layout,
   .pricing-hero__grid {
