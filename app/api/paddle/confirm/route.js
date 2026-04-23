@@ -1,6 +1,11 @@
 import { NextResponse } from 'next/server';
-import { getPaddleApiKey } from '../../../../lib/payments/paddle.js';
+import {
+  getPaddleApiKey,
+  isValidPaddleTransactionId,
+  validatePaddleTransaction,
+} from '../../../../lib/payments/paddle.js';
 import { recordPaddlePayment } from '../../../../lib/payments/paddle-record.js';
+import { getSupabaseAdminClient } from '../../../../lib/supabase/admin.js';
 import { getSupabaseServerClient } from '../../../../lib/supabase/server.js';
 
 async function fetchTransaction(transactionId) {
@@ -49,13 +54,17 @@ export async function POST(request) {
       return NextResponse.json({ error: 'Missing transactionId.' }, { status: 400 });
     }
 
+    if (!isValidPaddleTransactionId(transactionId)) {
+      return NextResponse.json({ error: 'Invalid transactionId.' }, { status: 400 });
+    }
+
     const transaction = await fetchTransaction(transactionId);
     const customUserId = transaction?.custom_data?.supabase_user_id ?? '';
     const customerEmail = transaction?.customer_id
       ? body.email || user.email || ''
       : user.email || '';
 
-    if (customUserId && customUserId !== user.id) {
+    if (customUserId !== user.id) {
       return NextResponse.json(
         { error: 'Transaction does not belong to this user.' },
         { status: 403 }
@@ -66,8 +75,11 @@ export async function POST(request) {
       return NextResponse.json({ status: transaction?.status || 'pending' });
     }
 
-    await recordPaddlePayment(supabase, transaction, customerEmail);
-    await upgradePaidAccess(supabase, user.id);
+    validatePaddleTransaction(transaction);
+
+    const adminSupabase = getSupabaseAdminClient();
+    await recordPaddlePayment(adminSupabase, transaction, customerEmail);
+    await upgradePaidAccess(adminSupabase, user.id);
 
     return NextResponse.json({
       status: 'completed',

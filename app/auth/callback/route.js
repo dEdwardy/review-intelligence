@@ -1,10 +1,18 @@
 import { NextResponse } from 'next/server';
 import { createServerClient } from '@supabase/ssr';
 
+function getSafeNextPath(next) {
+  if (!next || !next.startsWith('/') || next.startsWith('//')) {
+    return '/';
+  }
+
+  return next;
+}
+
 export async function GET(request) {
   const url = new URL(request.url);
   const code = url.searchParams.get('code');
-  const next = url.searchParams.get('next') || '/';
+  const next = getSafeNextPath(url.searchParams.get('next'));
 
   if (!code) {
     return NextResponse.redirect(new URL(`/auth?next=${encodeURIComponent(next)}`, url.origin));

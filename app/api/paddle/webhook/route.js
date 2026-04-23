@@ -1,8 +1,13 @@
 import { createHmac, timingSafeEqual } from 'node:crypto';
 import { NextResponse } from 'next/server';
 import { recordPaddlePayment } from '../../../../lib/payments/paddle-record.js';
-import { getPaddleWebhookSecret } from '../../../../lib/payments/paddle.js';
+import {
+  getPaddleWebhookSecret,
+  validatePaddleTransaction,
+} from '../../../../lib/payments/paddle.js';
 import { getSupabaseAdminClient } from '../../../../lib/supabase/admin.js';
+
+const PADDLE_SIGNATURE_TOLERANCE_MS = 5 * 60 * 1000;
 
 function parseSignature(signatureHeader) {
   const values = Object.fromEntries(
@@ -21,6 +26,14 @@ function parseSignature(signatureHeader) {
 function verifySignature(rawBody, signatureHeader, secret) {
   const { timestamp, hash } = parseSignature(signatureHeader);
   if (!timestamp || !hash) return false;
+
+  const signedAt = Number(timestamp) * 1000;
+  if (
+    !Number.isFinite(signedAt) ||
+    Math.abs(Date.now() - signedAt) > PADDLE_SIGNATURE_TOLERANCE_MS
+  ) {
+    return false;
+  }
 
   const signedPayload = `${timestamp}:${rawBody}`;
   const digest = createHmac('sha256', secret).update(signedPayload, 'utf8').digest('hex');
@@ -63,6 +76,8 @@ export async function POST(request) {
   }
 
   try {
+    validatePaddleTransaction(event.data);
+
     const supabase = getSupabaseAdminClient();
     await recordPaddlePayment(supabase, event.data, event?.data?.customer?.email ?? '');
     await upgradePaidAccess(supabase, userId);
