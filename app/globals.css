@@ -18,6 +18,8 @@
   --radius-md: 16px;
   --radius-sm: 10px;
   --max: 1180px;
+  --font-display: 'Avenir Next', 'Segoe UI', 'Helvetica Neue', system-ui, -apple-system, sans-serif;
+  --font-body: 'Aptos', 'Segoe UI', 'Helvetica Neue', system-ui, -apple-system, sans-serif;
 }
 
 * {
@@ -823,19 +825,6 @@ button.text-link {
 
 .pricing-list li + li {
   margin-top: 8px;
-}
-
-.paypal-box {
-  display: grid;
-  gap: 14px;
-}
-
-.paypal-box__account {
-  line-height: 1.6;
-}
-
-.paypal-box__account {
-  line-height: 1.6;
 }
 
 .auth-actions {

@@ -1,13 +1,13 @@
 import Link from 'next/link';
-
-const SUPPORT_EMAIL =
-  process.env.NEXT_PUBLIC_SUPPORT_EMAIL?.trim() || 'reviewtool.support@gmail.com';
+import { getPaddleConfig } from '../../lib/payments/paddle.js';
 
 export const metadata = {
   title: 'Refund Policy | Review Copilot',
 };
 
 export default function RefundPage() {
+  const { supportEmail } = getPaddleConfig();
+
   return (
     <main className="shell shell--landing">
       <section className="legal-page">
@@ -36,7 +36,7 @@ export default function RefundPage() {
           </ul>
           <p>
             To request a refund, please contact us at:{' '}
-            <a href={`mailto:${SUPPORT_EMAIL}`}>{SUPPORT_EMAIL}</a>
+            <a href={`mailto:${supportEmail}`}>{supportEmail}</a>
           </p>
           <p>We reserve the right to refuse refunds that do not meet the above criteria.</p>
         </div>

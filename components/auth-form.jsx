@@ -5,6 +5,10 @@ import Link from 'next/link';
 import { useSearchParams } from 'next/navigation';
 import { getSupabaseBrowserClient } from '../lib/supabase/client.js';
 
+function getAuthRedirectOrigin() {
+  return process.env.NEXT_PUBLIC_AUTH_REDIRECT_ORIGIN?.trim() || window.location.origin;
+}
+
 export default function AuthForm() {
   const supabase = getSupabaseBrowserClient();
   const searchParams = useSearchParams();
@@ -24,7 +28,9 @@ export default function AuthForm() {
     setMessage('');
     setIsError(false);
 
-    const redirectTo = `${window.location.origin}/auth/callback?next=${encodeURIComponent(nextPath)}`;
+    const redirectTo = `${getAuthRedirectOrigin()}/auth/callback?next=${encodeURIComponent(
+      nextPath
+    )}`;
     const authRequest =
       mode === 'signin'
         ? supabase.auth.signInWithPassword({ email, password })
@@ -33,12 +39,16 @@ export default function AuthForm() {
     const { data, error } = await authRequest;
     setBusy(false);
     setIsError(Boolean(error));
+
+    const normalizedError = error?.message?.toLowerCase() ?? '';
     setMessage(
       error
-        ? error.message
+        ? normalizedError.includes('email not confirmed')
+          ? 'Please confirm your email first. Check your inbox, then sign in again.'
+          : error.message
         : mode === 'signin'
           ? 'Signed in.'
-          : 'Check your email to finish registration.'
+          : `Account created. Please confirm ${email} from your inbox before signing in.`
     );
 
     if (!error && data?.session?.access_token && data?.session?.refresh_token) {
@@ -53,7 +63,7 @@ export default function AuthForm() {
     }
 
     if (!error && (mode === 'signin' || (mode === 'signup' && data?.session))) {
-      setMessage('Redirecting...');
+      setMessage('Redirecting…');
       window.location.href = nextPath;
     }
   }
@@ -81,6 +91,8 @@ export default function AuthForm() {
             <button
               className={`auth-mode-switch__item ${mode === 'signin' ? 'auth-mode-switch__item--active' : ''}`}
               type="button"
+              role="tab"
+              aria-selected={mode === 'signin'}
               onClick={() => setMode('signin')}
             >
               Sign In
@@ -88,6 +100,8 @@ export default function AuthForm() {
             <button
               className={`auth-mode-switch__item ${mode === 'signup' ? 'auth-mode-switch__item--active' : ''}`}
               type="button"
+              role="tab"
+              aria-selected={mode === 'signup'}
               onClick={() => setMode('signup')}
             >
               Create Account
@@ -114,7 +128,7 @@ export default function AuthForm() {
                 value={email}
                 onChange={(event) => setEmail(event.target.value)}
                 disabled={busy}
-                placeholder="you@company.com..."
+                placeholder="you@company.com…"
                 required
               />
             </div>
@@ -131,7 +145,7 @@ export default function AuthForm() {
                 onChange={(event) => setPassword(event.target.value)}
                 disabled={busy}
                 placeholder={
-                  mode === 'signin' ? 'Enter your password...' : 'Use at least 6 characters...'
+                  mode === 'signin' ? 'Enter your password…' : 'Use at least 6 characters…'
                 }
                 required
               />
@@ -144,7 +158,7 @@ export default function AuthForm() {
                 disabled={busy}
                 aria-busy={busy}
               >
-                {busy ? 'Working...' : mode === 'signin' ? 'Sign In' : 'Create Account'}
+                {busy ? 'Working…' : mode === 'signin' ? 'Sign In' : 'Create Account'}
               </button>
               <div className="auth-actions__secondary">
                 <button

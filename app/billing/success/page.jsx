@@ -2,8 +2,7 @@
 
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
-import { getProjectDisplayName } from '../../../lib/app-config.js';
-import { getStoragePrefix } from '../../../lib/app-config.js';
+import { getProjectDisplayName, getStoragePrefix } from '../../../lib/app-config.js';
 import { getPaddleConfig } from '../../../lib/payments/paddle.js';
 
 export default function BillingSuccessPage({ searchParams }) {
@@ -18,7 +17,7 @@ export default function BillingSuccessPage({ searchParams }) {
   const [status, setStatus] = useState(() => (transactionId ? 'checking' : 'pending'));
   const [statusMessage, setStatusMessage] = useState(() =>
     transactionId
-      ? 'Checking payment status...'
+      ? 'Checking payment status…'
       : 'Payment is still pending confirmation. Refresh this page after checkout completes.'
   );
   const displayEmail = queryEmail || savedEmail;
@@ -114,7 +113,7 @@ export default function BillingSuccessPage({ searchParams }) {
           </div>
         </div>
         <div className="hero__links">
-          <Link href="/" className="button button--primary">
+          <Link href="/#analyze" className="button button--primary">
             {status === 'completed' ? 'Start analysis' : 'Back home'}
           </Link>
           <Link href="/pricing" className="button button--ghost">

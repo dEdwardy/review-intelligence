@@ -97,7 +97,7 @@ export default function ReviewCopilotClient() {
             aria-busy={presetBusy === preset.label}
             onClick={() => loadPreset(preset)}
           >
-            {presetBusy === preset.label ? 'Loading...' : preset.label}
+            {presetBusy === preset.label ? 'Loading…' : preset.label}
           </button>
         ))}
       </div>
@@ -112,7 +112,7 @@ export default function ReviewCopilotClient() {
           autoComplete="off"
           value={appUrl}
           onChange={(event) => setAppUrl(event.target.value)}
-          placeholder="https://apps.apple.com/us/app/your-app/id123456789..."
+          placeholder="https://apps.apple.com/us/app/your-app/id123456789…"
           required
         />
         <div className="field__hint">
@@ -137,7 +137,7 @@ export default function ReviewCopilotClient() {
             autoComplete="off"
             value={competitor1}
             onChange={(event) => setCompetitor1(event.target.value)}
-            placeholder="Optional competitor URL..."
+            placeholder="Optional competitor URL…"
           />
         </div>
         <div className="field">
@@ -150,7 +150,7 @@ export default function ReviewCopilotClient() {
             autoComplete="off"
             value={competitor2}
             onChange={(event) => setCompetitor2(event.target.value)}
-            placeholder="Optional competitor URL..."
+            placeholder="Optional competitor URL…"
           />
         </div>
       </div>
@@ -168,7 +168,7 @@ export default function ReviewCopilotClient() {
             autoComplete="off"
             value={competitor3}
             onChange={(event) => setCompetitor3(event.target.value)}
-            placeholder="Optional competitor URL..."
+            placeholder="Optional competitor URL…"
           />
         </div>
       </div>
@@ -217,9 +217,9 @@ export default function ReviewCopilotClient() {
 
       <div className="actions" aria-busy={isPending}>
         <button className="button button--primary" type="submit" disabled={isPending}>
-          {isPending ? 'Reading App Store reviews...' : 'Analyze Reviews'}
+          {isPending ? 'Reading App Store reviews…' : 'Analyze Reviews'}
         </button>
-        <Link className="button button--ghost" href="/auth?next=/analysis&mode=signup">
+        <Link className="button button--ghost" href="/auth?next=/%23analyze&mode=signup">
           Register (3 Free)
         </Link>
         <a className="button button--ghost" href="#workflow">

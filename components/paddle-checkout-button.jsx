@@ -92,7 +92,7 @@ export default function PaddleCheckoutButton({ config, viewer, checkoutReady }) 
             disabled={busy}
             aria-busy={busy}
           >
-            {busy ? 'Opening checkout...' : 'Unlock Pro - $9'}
+            {busy ? 'Opening checkout…' : 'Unlock Pro - $9'}
           </button>
         ) : checkoutReady ? (
           <a
