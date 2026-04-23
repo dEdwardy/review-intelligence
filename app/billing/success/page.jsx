@@ -1,7 +1,7 @@
 'use client';
 
 import Link from 'next/link';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { getProjectDisplayName } from '../../../lib/app-config.js';
 import { getStoragePrefix } from '../../../lib/app-config.js';
 import { getPaddleConfig } from '../../../lib/payments/paddle.js';
@@ -13,9 +13,55 @@ export default function BillingSuccessPage({ searchParams }) {
   const [savedEmail] = useState(() =>
     typeof window === 'undefined' ? '' : (window.localStorage.getItem(storageKey) ?? '')
   );
-
   const queryEmail = typeof searchParams?.email === 'string' ? searchParams.email : '';
+  const transactionId = typeof searchParams?.txn === 'string' ? searchParams.txn : '';
+  const [status, setStatus] = useState(() => (transactionId ? 'checking' : 'pending'));
+  const [statusMessage, setStatusMessage] = useState(() =>
+    transactionId
+      ? 'Checking payment status...'
+      : 'Payment is still pending confirmation. Refresh this page after checkout completes.'
+  );
   const displayEmail = queryEmail || savedEmail;
+
+  useEffect(() => {
+    if (!transactionId) return;
+
+    let cancelled = false;
+
+    fetch('/api/paddle/confirm', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ transactionId, email: displayEmail }),
+    })
+      .then(async (response) => {
+        const data = await response.json().catch(() => ({}));
+        if (cancelled) return;
+
+        if (!response.ok) {
+          setStatus('error');
+          setStatusMessage(data?.error || 'Unable to confirm payment yet.');
+          return;
+        }
+
+        if (data?.status === 'completed') {
+          setStatus('completed');
+          setStatusMessage('Your one-time purchase has been confirmed and access is now unlocked.');
+          return;
+        }
+
+        setStatus('pending');
+        setStatusMessage('Payment is still being processed. Refresh this page in a moment.');
+      })
+      .catch(() => {
+        if (cancelled) return;
+        setStatus('error');
+        setStatusMessage('Unable to confirm payment yet.');
+      });
+
+    return () => {
+      cancelled = true;
+    };
+  }, [displayEmail, transactionId]);
 
   return (
     <main className="shell shell--landing">
@@ -27,10 +73,7 @@ export default function BillingSuccessPage({ searchParams }) {
         </div>
         <div className="eyebrow">Payment confirmed</div>
         <h1>{projectName} access unlocked.</h1>
-        <p className="pricing-card__lede">
-          Your one-time purchase is linked to your account. You can now run analyses without the
-          free limit.
-        </p>
+        <p className="pricing-card__lede">{statusMessage}</p>
         <div className="pricing-summary">
           <div>
             <div className="pricing-summary__label">Receipt email</div>
@@ -47,6 +90,10 @@ export default function BillingSuccessPage({ searchParams }) {
           <div>
             <div className="pricing-summary__label">Support</div>
             <div className="pricing-summary__value">{supportEmail}</div>
+          </div>
+          <div>
+            <div className="pricing-summary__label">Status</div>
+            <div className="pricing-summary__value">{status}</div>
           </div>
         </div>
         <div className="hero__links">

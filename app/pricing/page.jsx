@@ -1,7 +1,12 @@
 import Link from 'next/link';
 import { getProjectDisplayName } from '../../lib/app-config.js';
+import PaddleCheckoutButton from '../../components/paddle-checkout-button.jsx';
 import SessionActions from '../../components/session-actions.jsx';
-import { getPaddleConfig, isPaddleCheckoutReady } from '../../lib/payments/paddle.js';
+import {
+  getPaddleConfig,
+  hasPaddleJsCheckout,
+  isPaddleCheckoutReady,
+} from '../../lib/payments/paddle.js';
 import { getViewer } from '../../lib/user/viewer.js';
 
 const VALUE_POINTS = [
@@ -23,6 +28,7 @@ export default async function PricingPage() {
   const projectName = getProjectDisplayName();
   const config = getPaddleConfig();
   const checkoutReady = isPaddleCheckoutReady();
+  const paddleJsReady = hasPaddleJsCheckout();
   const viewer = await getViewer();
 
   return (
@@ -109,30 +115,21 @@ export default async function PricingPage() {
                 Early access offer. One-time purchase now. Subscription plans coming later.
               </p>
             </div>
+            <PaddleCheckoutButton
+              config={config}
+              checkoutReady={checkoutReady}
+              viewer={{
+                email: viewer.email,
+                userId: viewer.user?.id ?? '',
+              }}
+            />
 
-            <div className="pricing-panel__cta">
-              {checkoutReady ? (
-                <a
-                  className="button button--primary button--compact"
-                  href={config.checkoutUrl}
-                  target="_blank"
-                  rel="noreferrer"
-                >
-                  Unlock Pro - $9
-                </a>
-              ) : (
-                <div className="pricing-panel__disabled-cta" role="status" aria-live="polite">
-                  <span className="button button--ghost button--compact button--static">
-                    Unlock Pro - $9
-                  </span>
-                </div>
-              )}
-              <span className="pricing-panel__caption">
-                {checkoutReady
-                  ? 'One-time payment. Instant access.'
-                  : 'Checkout is not connected yet. Add NEXT_PUBLIC_PADDLE_CHECKOUT_URL to enable this button.'}
-              </span>
-            </div>
+            {!paddleJsReady ? (
+              <div className="pricing-note">
+                For reliable account linking, enable Paddle.js with{' '}
+                <code>NEXT_PUBLIC_PADDLE_CLIENT_TOKEN</code>.
+              </div>
+            ) : null}
           </div>
         </aside>
       </section>
