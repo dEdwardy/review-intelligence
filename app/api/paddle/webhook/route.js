@@ -1,5 +1,6 @@
 import { createHmac, timingSafeEqual } from 'node:crypto';
 import { NextResponse } from 'next/server';
+import { recordPaddlePayment } from '../../../../lib/payments/paddle-record.js';
 import { getPaddleWebhookSecret } from '../../../../lib/payments/paddle.js';
 import { getSupabaseServerClient } from '../../../../lib/supabase/server.js';
 
@@ -31,13 +32,17 @@ function verifySignature(rawBody, signatureHeader, secret) {
   return timingSafeEqual(left, right);
 }
 
+async function upgradePaidAccess(supabase, userId) {
+  const result = await supabase.rpc('record_paid_analysis', { p_user_id: userId });
+  if (result?.error) {
+    throw new Error(result.error.message || 'Unable to unlock paid access.');
+  }
+}
+
 export async function POST(request) {
   const secret = getPaddleWebhookSecret();
   if (!secret) {
-    return NextResponse.json(
-      { error: 'PADDLE_WEBHOOK_SECRET is not configured.' },
-      { status: 500 }
-    );
+    return NextResponse.json({ received: true, skipped: 'missing_webhook_secret' });
   }
 
   const signatureHeader = request.headers.get('paddle-signature') ?? '';
@@ -57,8 +62,17 @@ export async function POST(request) {
     return NextResponse.json({ received: true, skipped: 'missing_user_id' });
   }
 
-  const supabase = await getSupabaseServerClient();
-  await supabase.rpc('record_paid_analysis', { p_user_id: userId });
+  try {
+    const supabase = await getSupabaseServerClient();
+    await recordPaddlePayment(supabase, event.data, event?.data?.customer?.email ?? '');
+    await upgradePaidAccess(supabase, userId);
+  } catch (error) {
+    return NextResponse.json({
+      received: true,
+      deferred: true,
+      reason: error instanceof Error ? error.message : 'Webhook write deferred',
+    });
+  }
 
   return NextResponse.json({ received: true, upgraded: true });
 }

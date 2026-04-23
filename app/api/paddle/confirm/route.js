@@ -1,5 +1,6 @@
 import { NextResponse } from 'next/server';
 import { getPaddleApiKey } from '../../../../lib/payments/paddle.js';
+import { recordPaddlePayment } from '../../../../lib/payments/paddle-record.js';
 import { getSupabaseServerClient } from '../../../../lib/supabase/server.js';
 
 async function fetchTransaction(transactionId) {
@@ -23,6 +24,13 @@ async function fetchTransaction(transactionId) {
   }
 
   return payload?.data;
+}
+
+async function upgradePaidAccess(supabase, userId) {
+  const result = await supabase.rpc('record_paid_analysis', { p_user_id: userId });
+  if (result?.error) {
+    throw new Error(result.error.message || 'Unable to unlock paid access.');
+  }
 }
 
 export async function POST(request) {
@@ -58,7 +66,8 @@ export async function POST(request) {
       return NextResponse.json({ status: transaction?.status || 'pending' });
     }
 
-    await supabase.rpc('record_paid_analysis', { p_user_id: user.id });
+    await recordPaddlePayment(supabase, transaction, customerEmail);
+    await upgradePaidAccess(supabase, user.id);
 
     return NextResponse.json({
       status: 'completed',
@@ -68,7 +77,7 @@ export async function POST(request) {
   } catch (error) {
     return NextResponse.json(
       { error: error instanceof Error ? error.message : 'Unable to confirm Paddle payment.' },
-      { status: 400 }
+      { status: 400, headers: { 'Cache-Control': 'no-store' } }
     );
   }
 }

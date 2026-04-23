@@ -44,6 +44,9 @@ export default function BillingSuccessPage({ searchParams }) {
         }
 
         if (data?.status === 'completed') {
+          if (displayEmail && typeof window !== 'undefined') {
+            window.localStorage.setItem(storageKey, displayEmail);
+          }
           setStatus('completed');
           setStatusMessage('Your one-time purchase has been confirmed and access is now unlocked.');
           return;
@@ -61,7 +64,7 @@ export default function BillingSuccessPage({ searchParams }) {
     return () => {
       cancelled = true;
     };
-  }, [displayEmail, transactionId]);
+  }, [displayEmail, storageKey, transactionId]);
 
   return (
     <main className="shell shell--landing">
@@ -71,8 +74,14 @@ export default function BillingSuccessPage({ searchParams }) {
             Back to home
           </Link>
         </div>
-        <div className="eyebrow">Payment confirmed</div>
-        <h1>{projectName} access unlocked.</h1>
+        <div className="eyebrow">
+          {status === 'completed' ? 'Payment confirmed' : 'Payment status'}
+        </div>
+        <h1>
+          {status === 'completed'
+            ? `${projectName} access unlocked.`
+            : 'Checking your purchase status.'}
+        </h1>
         <p className="pricing-card__lede">{statusMessage}</p>
         <div className="pricing-summary">
           <div>
@@ -93,16 +102,33 @@ export default function BillingSuccessPage({ searchParams }) {
           </div>
           <div>
             <div className="pricing-summary__label">Status</div>
-            <div className="pricing-summary__value">{status}</div>
+            <div className="pricing-summary__value">
+              {status === 'completed'
+                ? 'Completed'
+                : status === 'checking'
+                  ? 'Checking'
+                  : status === 'pending'
+                    ? 'Pending'
+                    : 'Needs attention'}
+            </div>
           </div>
         </div>
         <div className="hero__links">
           <Link href="/" className="button button--primary">
-            Start analysis
+            {status === 'completed' ? 'Start analysis' : 'Back home'}
           </Link>
           <Link href="/pricing" className="button button--ghost">
             View pricing
           </Link>
+          {status !== 'completed' ? (
+            <button
+              className="button button--ghost"
+              type="button"
+              onClick={() => window.location.reload()}
+            >
+              Refresh status
+            </button>
+          ) : null}
         </div>
       </section>
     </main>
