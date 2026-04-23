@@ -96,7 +96,7 @@ export default function AuthForm() {
           <div className="auth-highlights" aria-label="Benefits">
             <span>3 free analyses per account</span>
             <span>Email confirmation required</span>
-            <span>PayPal upgrade after quota ends</span>
+            <span>One-time upgrade after quota ends</span>
           </div>
         </div>
 

@@ -4,9 +4,11 @@ import Link from 'next/link';
 import { useState } from 'react';
 import { getProjectDisplayName } from '../../../lib/app-config.js';
 import { getStoragePrefix } from '../../../lib/app-config.js';
+import { getPaddleConfig } from '../../../lib/payments/paddle.js';
 
 export default function BillingSuccessPage({ searchParams }) {
   const projectName = getProjectDisplayName();
+  const { supportEmail } = getPaddleConfig();
   const storageKey = `${getStoragePrefix()}-receipt-email`;
   const [savedEmail] = useState(() =>
     typeof window === 'undefined' ? '' : (window.localStorage.getItem(storageKey) ?? '')
@@ -26,7 +28,8 @@ export default function BillingSuccessPage({ searchParams }) {
         <div className="eyebrow">Payment confirmed</div>
         <h1>{projectName} access unlocked.</h1>
         <p className="pricing-card__lede">
-          Your purchase is linked to your account. You can now run analyses without the free limit.
+          Your one-time purchase is linked to your account. You can now run analyses without the
+          free limit.
         </p>
         <div className="pricing-summary">
           <div>
@@ -40,6 +43,10 @@ export default function BillingSuccessPage({ searchParams }) {
             <div className="pricing-summary__value">
               Run an analysis with a public App Store URL
             </div>
+          </div>
+          <div>
+            <div className="pricing-summary__label">Support</div>
+            <div className="pricing-summary__value">{supportEmail}</div>
           </div>
         </div>
         <div className="hero__links">

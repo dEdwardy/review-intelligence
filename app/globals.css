@@ -799,6 +799,12 @@ button.text-link {
   color: var(--muted);
 }
 
+.pricing-card__subline {
+  color: var(--muted);
+  font-size: 0.88rem;
+  margin-top: -10px;
+}
+
 .pricing-list {
   margin: 0;
   padding-left: 18px;

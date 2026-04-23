@@ -1,7 +1,7 @@
 import Link from 'next/link';
 import { getProjectDisplayName } from '../../lib/app-config.js';
 import SessionActions from '../../components/session-actions.jsx';
-import { getPayPalConfig } from '../../lib/payments/paypal.js';
+import { getPaddleConfig, isPaddleCheckoutReady } from '../../lib/payments/paddle.js';
 import { getViewer } from '../../lib/user/viewer.js';
 
 const VALUE_POINTS = [
@@ -21,7 +21,8 @@ const VALUE_POINTS = [
 
 export default async function PricingPage() {
   const projectName = getProjectDisplayName();
-  const config = getPayPalConfig();
+  const config = getPaddleConfig();
+  const checkoutReady = isPaddleCheckoutReady();
   const viewer = await getViewer();
 
   return (
@@ -32,7 +33,7 @@ export default async function PricingPage() {
           <div>
             <div className="brand-lockup__name">{projectName}</div>
             <div className="brand-lockup__subhead">
-              Launch pricing for App Store review analysis
+              Early access pricing for App Store review analysis
             </div>
           </div>
         </div>
@@ -49,19 +50,20 @@ export default async function PricingPage() {
 
       <section className="pricing-layout">
         <div className="pricing-hero">
-          <div className="eyebrow">Launch price</div>
+          <div className="eyebrow">Early access</div>
           <h1>{config.productName}</h1>
           <p className="pricing-card__lede">
-            An early-access one-time purchase for teams that want to turn public App Store reviews
-            into a ranked fix list, reply drafts, and competitor gaps they can use in planning.
+            A one-time early-access purchase for teams that want to turn public App Store reviews
+            into a ranked fix list, reply drafts, and competitor gaps they can use right away.
           </p>
 
           <div className="pricing-card__price">
             <span className="pricing-card__amount">
-              {config.currency} {config.amount}
+              {config.currencySymbol + config.oneTimeAmount}
             </span>
-            <span className="pricing-card__term">launch price, one-time purchase</span>
+            <span className="pricing-card__term">{config.purchaseLabel}</span>
           </div>
+          <div className="pricing-card__subline">One-time payment. Instant access.</div>
 
           <div className="pricing-card__quota">
             {viewer.user ? (
@@ -87,8 +89,8 @@ export default async function PricingPage() {
           </div>
 
           <div className="pricing-note">
-            Paddle checkout is still under review, so this page stays in a ready-to-buy state until
-            the approved flow is enabled.
+            Early access pricing is live at a one-time $9. Subscription plans are reserved for a
+            later release.
           </div>
         </div>
 
@@ -101,20 +103,37 @@ export default async function PricingPage() {
           <div className="eyebrow">Checkout</div>
           <div className="pricing-panel__shell">
             <div className="pricing-panel__status">
-              <span className="pricing-panel__badge">Paddle review</span>
-              <h2>Unlock Pro</h2>
+              <span className="pricing-panel__badge">One-time</span>
+              <h2>Unlock Pro - $9</h2>
               <p className="hint">
-                Checkout is temporarily hidden while Paddle approval is in progress.
+                Early access offer. One-time purchase now. Subscription plans coming later.
               </p>
             </div>
 
             <div className="pricing-panel__cta">
-              <button className="button button--primary button--compact" type="button" disabled>
-                Unlock Pro
-              </button>
+              {checkoutReady ? (
+                <a
+                  className="button button--primary button--compact"
+                  href={config.checkoutUrl}
+                  target="_blank"
+                  rel="noreferrer"
+                >
+                  Unlock Pro - $9
+                </a>
+              ) : (
+                <button className="button button--primary button--compact" type="button" disabled>
+                  Unlock Pro - $9
+                </button>
+              )}
               <span className="pricing-panel__caption">
-                Upgrade to Pro after the approval flow is enabled.
+                {checkoutReady
+                  ? 'One-time payment. Instant access.'
+                  : 'Paddle checkout will be linked here once the approval flow is enabled.'}
               </span>
+            </div>
+
+            <div className="pricing-note">
+              Price ID: <code>{config.oneTimePriceId}</code>
             </div>
           </div>
         </aside>

@@ -11,10 +11,12 @@ export default function BillingCancelPage() {
         </div>
         <div className="eyebrow">Checkout paused</div>
         <h1>No charge was made.</h1>
-        <p className="pricing-card__lede">You can go back and try again whenever you are ready.</p>
+        <p className="pricing-card__lede">
+          You can go back and reopen the one-time early access checkout whenever you are ready.
+        </p>
         <div className="hero__links">
           <Link href="/pricing" className="button button--primary">
-            Try checkout again
+            Reopen checkout
           </Link>
           <Link href="/" className="button button--ghost">
             Back home
