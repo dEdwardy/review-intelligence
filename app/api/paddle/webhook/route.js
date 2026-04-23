@@ -2,7 +2,7 @@ import { createHmac, timingSafeEqual } from 'node:crypto';
 import { NextResponse } from 'next/server';
 import { recordPaddlePayment } from '../../../../lib/payments/paddle-record.js';
 import { getPaddleWebhookSecret } from '../../../../lib/payments/paddle.js';
-import { getSupabaseServerClient } from '../../../../lib/supabase/server.js';
+import { getSupabaseAdminClient } from '../../../../lib/supabase/admin.js';
 
 function parseSignature(signatureHeader) {
   const values = Object.fromEntries(
@@ -63,15 +63,18 @@ export async function POST(request) {
   }
 
   try {
-    const supabase = await getSupabaseServerClient();
+    const supabase = getSupabaseAdminClient();
     await recordPaddlePayment(supabase, event.data, event?.data?.customer?.email ?? '');
     await upgradePaidAccess(supabase, userId);
   } catch (error) {
-    return NextResponse.json({
-      received: true,
-      deferred: true,
-      reason: error instanceof Error ? error.message : 'Webhook write deferred',
-    });
+    return NextResponse.json(
+      {
+        received: true,
+        deferred: true,
+        reason: error instanceof Error ? error.message : 'Webhook write deferred',
+      },
+      { status: 500 }
+    );
   }
 
   return NextResponse.json({ received: true, upgraded: true });
