@@ -121,19 +121,17 @@ export default async function PricingPage() {
                   Unlock Pro - $9
                 </a>
               ) : (
-                <button className="button button--primary button--compact" type="button" disabled>
-                  Unlock Pro - $9
-                </button>
+                <div className="pricing-panel__disabled-cta" role="status" aria-live="polite">
+                  <span className="button button--ghost button--compact button--static">
+                    Unlock Pro - $9
+                  </span>
+                </div>
               )}
               <span className="pricing-panel__caption">
                 {checkoutReady
                   ? 'One-time payment. Instant access.'
-                  : 'Paddle checkout will be linked here once the approval flow is enabled.'}
+                  : 'Checkout is not connected yet. Add NEXT_PUBLIC_PADDLE_CHECKOUT_URL to enable this button.'}
               </span>
-            </div>
-
-            <div className="pricing-note">
-              Price ID: <code>{config.oneTimePriceId}</code>
             </div>
           </div>
         </aside>

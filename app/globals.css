@@ -548,6 +548,11 @@ button.text-link {
   color: #e6dccd;
 }
 
+.button--static {
+  cursor: default;
+  opacity: 0.78;
+}
+
 .button--ghost:hover,
 .preset-button:hover,
 .tabbar__item:hover {
@@ -664,6 +669,10 @@ button.text-link {
   gap: 8px;
   justify-items: start;
   padding-top: 4px;
+}
+
+.pricing-panel__disabled-cta {
+  display: inline-flex;
 }
 
 .pricing-panel__caption {
