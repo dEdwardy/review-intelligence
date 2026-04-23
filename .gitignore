@@ -10,3 +10,5 @@ coverage
 .playwright-cli
 ui-check*.png
 ui-select-final.png
+.env
+.env.local
