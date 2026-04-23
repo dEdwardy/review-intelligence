@@ -109,22 +109,37 @@ export default async function PricingPage() {
           <div className="eyebrow">Checkout</div>
           <div className="pricing-panel__shell">
             <div className="pricing-panel__status">
-              <span className="pricing-panel__badge">One-time</span>
-              <h2>Unlock Pro - $9</h2>
+              <span className="pricing-panel__badge">
+                {viewer.planStatus === 'premium' ? 'Active' : 'One-time'}
+              </span>
+              <h2>{viewer.planStatus === 'premium' ? 'Pro access active' : 'Unlock Pro - $9'}</h2>
               <p className="hint">
-                Early access offer. One-time purchase now. Subscription plans coming later.
+                {viewer.planStatus === 'premium'
+                  ? 'This account already has Pro access. You can keep analyzing without using free runs.'
+                  : 'Early access offer. One-time purchase now. Subscription plans coming later.'}
               </p>
             </div>
-            <PaddleCheckoutButton
-              config={config}
-              checkoutReady={checkoutReady}
-              viewer={{
-                email: viewer.email,
-                userId: viewer.user?.id ?? '',
-              }}
-            />
+            {viewer.planStatus === 'premium' ? (
+              <div className="pricing-panel__cta">
+                <Link className="button button--primary button--compact" href="/#analyze">
+                  Open analyzer
+                </Link>
+                <span className="pricing-panel__caption">
+                  No checkout needed for this signed-in account.
+                </span>
+              </div>
+            ) : (
+              <PaddleCheckoutButton
+                config={config}
+                checkoutReady={checkoutReady}
+                viewer={{
+                  email: viewer.email,
+                  userId: viewer.user?.id ?? '',
+                }}
+              />
+            )}
 
-            {!paddleJsReady ? (
+            {!paddleJsReady && viewer.planStatus !== 'premium' ? (
               <div className="pricing-note">
                 For reliable account linking, enable Paddle.js with{' '}
                 <code>NEXT_PUBLIC_PADDLE_CLIENT_TOKEN</code>.

@@ -497,6 +497,15 @@ button.text-link {
   flex-wrap: wrap;
 }
 
+.masthead__email {
+  max-width: 220px;
+  overflow: hidden;
+  color: var(--muted);
+  font-size: 0.84rem;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
 .button {
   display: inline-flex;
   align-items: center;
@@ -633,7 +642,7 @@ button.text-link {
 .pricing-panel__shell {
   display: grid;
   gap: 18px;
-  margin-top: 100px;
+  margin-top: 36px;
   padding: 18px;
   border: 1px solid var(--line);
   border-radius: 20px;

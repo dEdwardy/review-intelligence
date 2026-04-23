@@ -16,7 +16,7 @@ export default function SessionActions({ userEmail, nextPath = '/' }) {
   if (userEmail) {
     return (
       <div className="masthead__session">
-        <span className="text-link" title={userEmail}>
+        <span className="masthead__email" title={userEmail}>
           {userEmail}
         </span>
         <Link className="text-link" href="/pricing">

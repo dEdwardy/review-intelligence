@@ -28,7 +28,7 @@ const PRESETS = [
   },
 ];
 
-export default function ReviewCopilotClient() {
+export default function ReviewCopilotClient({ viewer }) {
   const router = useRouter();
   const [appUrl, setAppUrl] = useState('');
   const [competitor1, setCompetitor1] = useState('');
@@ -41,6 +41,17 @@ export default function ReviewCopilotClient() {
   const [pendingLabel, setPendingLabel] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
   const [presetBusy, setPresetBusy] = useState('');
+
+  const isSignedIn = Boolean(viewer?.email);
+  const isPremium = viewer?.planStatus === 'premium';
+  const freeRemaining = Number(viewer?.freeRemaining ?? 3);
+  const isFreeQuotaEmpty = isSignedIn && !isPremium && freeRemaining <= 0;
+
+  const quotaHint = isPremium
+    ? 'Pro access is active. Analyses will not consume free runs.'
+    : isSignedIn
+      ? `${freeRemaining} free analysis${freeRemaining === 1 ? '' : 'es'} left before upgrade.`
+      : 'Sign-in required. New accounts get 3 free analyses before upgrade.';
 
   const competitors = useMemo(
     () => [competitor1, competitor2, competitor3].filter((item) => item.trim()),
@@ -82,9 +93,7 @@ export default function ReviewCopilotClient() {
         <p className="hint">
           Start with one app. Add competitors only when you need a side-by-side read.
         </p>
-        <p className="hint">
-          Sign-in required. New accounts get <strong>3 free analyses</strong> before upgrade.
-        </p>
+        <p className="hint">{quotaHint}</p>
       </div>
 
       <div className="preset-actions">
@@ -97,7 +106,7 @@ export default function ReviewCopilotClient() {
             aria-busy={presetBusy === preset.label}
             onClick={() => loadPreset(preset)}
           >
-            {presetBusy === preset.label ? 'Loading…' : preset.label}
+            {presetBusy === preset.label ? 'Loading...' : preset.label}
           </button>
         ))}
       </div>
@@ -112,7 +121,7 @@ export default function ReviewCopilotClient() {
           autoComplete="off"
           value={appUrl}
           onChange={(event) => setAppUrl(event.target.value)}
-          placeholder="https://apps.apple.com/us/app/your-app/id123456789…"
+          placeholder="https://apps.apple.com/us/app/your-app/id123456789..."
           required
         />
         <div className="field__hint">
@@ -137,7 +146,7 @@ export default function ReviewCopilotClient() {
             autoComplete="off"
             value={competitor1}
             onChange={(event) => setCompetitor1(event.target.value)}
-            placeholder="Optional competitor URL…"
+            placeholder="Optional competitor URL..."
           />
         </div>
         <div className="field">
@@ -150,7 +159,7 @@ export default function ReviewCopilotClient() {
             autoComplete="off"
             value={competitor2}
             onChange={(event) => setCompetitor2(event.target.value)}
-            placeholder="Optional competitor URL…"
+            placeholder="Optional competitor URL..."
           />
         </div>
       </div>
@@ -168,7 +177,7 @@ export default function ReviewCopilotClient() {
             autoComplete="off"
             value={competitor3}
             onChange={(event) => setCompetitor3(event.target.value)}
-            placeholder="Optional competitor URL…"
+            placeholder="Optional competitor URL..."
           />
         </div>
       </div>
@@ -217,15 +226,28 @@ export default function ReviewCopilotClient() {
 
       <div className="actions" aria-busy={isPending}>
         <button className="button button--primary" type="submit" disabled={isPending}>
-          {isPending ? 'Reading App Store reviews…' : 'Analyze Reviews'}
+          {isPending ? 'Reading App Store reviews...' : 'Analyze Reviews'}
         </button>
-        <Link className="button button--ghost" href="/auth?next=/%23analyze&mode=signup">
-          Register (3 Free)
-        </Link>
+        {!isSignedIn ? (
+          <Link className="button button--ghost" href="/auth?next=/%23analyze&mode=signup">
+            Register (3 Free)
+          </Link>
+        ) : null}
+        {isFreeQuotaEmpty ? (
+          <Link className="button button--ghost" href="/pricing?upgrade=1">
+            Upgrade to Pro
+          </Link>
+        ) : null}
         <a className="button button--ghost" href="#workflow">
           View Outputs
         </a>
       </div>
+
+      {isFreeQuotaEmpty ? (
+        <div className="inline-status" role="status">
+          Free runs are used up. Upgrade once to unlock Pro access.
+        </div>
+      ) : null}
 
       {isPending && pendingLabel ? (
         <div className="inline-status" role="status" aria-live="polite">

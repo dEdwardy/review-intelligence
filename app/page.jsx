@@ -33,11 +33,6 @@ export default async function HomePage() {
           </div>
         </div>
         <div className="masthead__note">Apple App Store only</div>
-        <div className="masthead__links">
-          <Link className="text-link" href="/pricing">
-            Pricing
-          </Link>
-        </div>
         <SessionActions userEmail={viewer.email} nextPath="/" />
       </header>
 
@@ -68,7 +63,9 @@ export default async function HomePage() {
           </div>
 
           <div className="hero__proof">
-            <span>3 free runs after sign-up</span>
+            <span>
+              {viewer.planStatus === 'premium' ? 'Pro access active' : '3 free runs after sign-up'}
+            </span>
             <span>Exports in Markdown &amp; CSV</span>
             <span>Compare up to 3 competitors</span>
           </div>
@@ -122,7 +119,13 @@ export default async function HomePage() {
         </div>
 
         <div className="hero__aside" id="analyze">
-          <ReviewCopilotClient />
+          <ReviewCopilotClient
+            viewer={{
+              email: viewer.email,
+              planStatus: viewer.planStatus,
+              freeRemaining: viewer.freeRemaining,
+            }}
+          />
         </div>
       </section>
 
